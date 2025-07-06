@@ -1,0 +1,383 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import API from '../api/api';
+import './Auth.css';
+
+type Gender = "Male" | "Female" | "Other";
+
+interface FormData {
+    fullName: string;
+    gender: Gender | "";
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
+
+const RegisterPage: React.FC = () => {
+
+    const [formVal, setFormVal] = useState<FormData>({
+        fullName: "",
+        gender: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+    });
+
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<boolean>(false);
+    const navigate = useNavigate();
+
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
+        const { name, value } = e.target;
+        setFormVal((prev) => ({ ...prev, [name]: value }));
+        setError(null);
+        setSuccess(false);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const { fullName, gender, email, password, confirmPassword } = formVal;
+
+        if (password !== confirmPassword) {
+            setError("Passwords do not match.");
+            return;
+        }
+
+        // const payload = { fullName, gender, email, password };
+        const payload = { fullName, gender, email, passwordHash: password };
+
+
+        try {
+            const res = await API.post('/auth/register', payload);
+            if (res.status === 200 || res.status === 201) {
+                setSuccess(true);
+                setFormVal({
+                    fullName: "",
+                    gender: "",
+                    email: "",
+                    password: "",
+                    confirmPassword: "",
+                });
+
+                setTimeout(() => {
+                    navigate("/login");
+                }, 1000);
+            }
+        } catch (err: any) {
+            alert(err?.response?.data || "Registration failed.");
+            setError("Something went wrong.");
+        }
+    };
+    return (
+        <>
+            <div className="parentContainer">
+
+                <form onSubmit={handleSubmit}>
+                    <h3>Register</h3>
+                    <label htmlFor="">Full Name</label>
+                    <input
+                        type="text"
+                        name="fullName"
+                        value={formVal.fullName}
+                        onChange={handleChange}
+                        placeholder="Enter your full name"
+                    />
+
+                    <label htmlFor="">Gender</label>
+                    <select
+                        name="gender"
+                        value={formVal.gender}
+                        onChange={handleChange}>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+
+
+                    <label htmlFor="">Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={formVal.email}
+                        onChange={handleChange}
+                        placeholder="Eneter email" />
+
+
+
+                    <label htmlFor="">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        value={formVal.password}
+                        onChange={handleChange}
+                        placeholder="Enter password" />
+
+
+
+                    <label htmlFor="">Confirm Password</label>
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        value={formVal.confirmPassword}
+                        onChange={handleChange}
+                        placeholder="Confirm Password" />
+
+
+                    <button type="submit">Register</button>
+                    {error && <p className="error">{error}</p>}
+                    {success && <p className="success">Registration successful!</p>}
+                    <p className="redirect-text">
+                        Already have an account? <Link to="/login">Login here</Link>
+                    </p>
+                </form>
+
+            </div>
+        </>
+    )
+}
+
+export default RegisterPage
+
+📦 1. Imports
+
+import { useState } from "react";
+useState: React hook for managing local state in a component.
+
+import { Link, useNavigate } from "react-router-dom";
+Link: lets you navigate between pages (routes) without reloading the page.
+
+useNavigate: lets you redirect the user programmatically after registration.
+
+import API from '../api/api';
+API: a configured Axios instance to simplify API requests (like axios.create()).
+
+It targets your backend server (e.g. http://localhost:3000/api).
+
+import './Auth.css';
+Imports custom CSS styles for this auth form (like spacing, colors, etc).
+
+🧾 2. Types
+
+type Gender = "Male" | "Female" | "Other";
+Defines a custom type called Gender — allowed values are "Male", "Female", or "Other".
+
+interface FormData {
+    fullName: string;
+    gender: Gender | "";
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
+This FormData interface defines the shape of the form’s state.
+
+gender can be a valid Gender or an empty string "" (used when no selection is made yet).
+
+🧠 3. Component Declaration
+
+const RegisterPage: React.FC = () => {
+Declares a React Functional Component named RegisterPage.
+
+The React.FC type adds type-safety and autocomplete.
+
+🔧 4. State Hooks
+
+const [formVal, setFormVal] = useState<FormData>({
+formVal: holds current values of the form inputs.
+
+setFormVal: function to update the state.
+
+    fullName: "",
+    gender: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+});
+Initial state: all fields are empty.
+
+const [error, setError] = useState<string | null>(null);
+error: stores error message strings, or null if there's no error.
+
+const [success, setSuccess] = useState<boolean>(false);
+success: true if registration succeeded, false otherwise.
+
+const navigate = useNavigate();
+Hook from React Router to navigate programmatically after success.
+
+🖊️ 5. Input Change Handler
+
+const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+) => {
+This function handles input and select field changes.
+
+    const { name, value } = e.target;
+Gets the name of the field (e.g. "email") and its value (e.g. "example@mail.com").
+
+    setFormVal((prev) => ({ ...prev, [name]: value }));
+Updates the formVal state using dynamic key names:
+
+...prev copies all previous values.
+
+[name]: value updates only the changed field.
+
+    setError(null);
+    setSuccess(false);
+Resets feedback messages when the user starts typing again.
+
+📤 6. Form Submit Handler
+
+const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+Called when the user submits the form.
+
+preventDefault() stops the browser from reloading.
+
+    const { fullName, gender, email, password, confirmPassword } = formVal;
+Destructures the current values from form state.
+
+    if (password !== confirmPassword) {
+        setError("Passwords do not match.");
+        return;
+    }
+Client-side validation: shows an error if passwords do not match.
+
+📦 Create the data payload:
+
+    const payload = { fullName, gender, email, passwordHash: password };
+Prepares the request body to send to the API.
+
+Renames password to passwordHash — likely because the backend expects that key.
+
+📡 API Request
+
+    const res = await API.post('/auth/register', payload);
+Sends a POST request to the /auth/register endpoint with form data.
+
+    if (res.status === 200 || res.status === 201) {
+If the server replies with a success status, proceed to reset form:
+
+        setSuccess(true);
+        setFormVal({
+            fullName: "",
+            gender: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+        });
+Clear the form after successful registration.
+
+
+        setTimeout(() => {
+            navigate("/login");
+        }, 1000);
+After a short delay (1 second), redirect to login page.
+
+❌ Error Handling
+
+} catch (err: any) {
+    alert(err?.response?.data || "Registration failed.");
+    setError("Something went wrong.");
+}
+If registration fails:
+
+Show an alert() with either a server error or fallback message.
+
+Display a general error below the form.
+
+🧱 7. Form UI (JSX)
+
+return (
+    <>
+        <div className="parentContainer">
+Main container with class for styling (Auth.css).
+
+📋 Form HTML
+
+            <form onSubmit={handleSubmit}>
+                <h3>Register</h3>
+The form calls handleSubmit on submission.
+
+👤 Full Name
+
+                <label htmlFor="">Full Name</label>
+                <input
+                    type="text"
+                    name="fullName"
+                    value={formVal.fullName}
+                    onChange={handleChange}
+                    placeholder="Enter your full name"
+                />
+🚻 Gender
+
+                <label htmlFor="">Gender</label>
+                <select
+                    name="gender"
+                    value={formVal.gender}
+                    onChange={handleChange}>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+📧 Email
+
+                <label htmlFor="">Email</label>
+                <input
+                    type="email"
+                    name="email"
+                    value={formVal.email}
+                    onChange={handleChange}
+                    placeholder="Eneter email" />
+🔐 Password
+
+                <label htmlFor="">Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    value={formVal.password}
+                    onChange={handleChange}
+                    placeholder="Enter password" />
+✅ Confirm Password
+
+                <label htmlFor="">Confirm Password</label>
+                <input
+                    type="password"
+                    name="confirmPassword"
+                    value={formVal.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="Confirm Password" />
+🟢 Submit Button
+
+                <button type="submit">Register</button>
+Submits the form and triggers registration.
+
+🔔 Feedback
+
+                {error && <p className="error">{error}</p>}
+                {success && <p className="success">Registration successful!</p>}
+Shows messages conditionally:
+
+Only shown when error or success is true.
+
+🔗 Link to Login
+
+                <p className="redirect-text">
+                    Already have an account? <Link to="/login">Login here</Link>
+                </p>
+🚪 Export
+
+export default RegisterPage;
+Makes this component usable in other files (import RegisterPage from './...')
+
+✅ Summary
+Part	Description
+Form state	Managed with useState for all input fields.
+Form validation	Passwords must match before submitting.
+API integration	Uses Axios (API.post) to send data to the backend.
+Error handling	Graceful handling with messages and alerts.
+Routing	Navigates to login page after registration.
+Typing	TypeScript ensures form shape, field values, and event types are correct.

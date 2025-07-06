@@ -1,0 +1,103 @@
+import { BrowserRouter,Routes, Route } from "react-router-dom";
+import LandingPage from "./Components/LandingPage";
+import UserPage from "./Components/UserPage";
+import LoginPage from "./Pages/LoginPage";
+import RegisterPage from "./Pages/RegisterPage";
+
+function App() {
+  return (
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/user" element={<UserPage />} />
+    </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+
+1. Import statements
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import – A JavaScript keyword that allows you to bring in code (functions, components, etc.) from another module or library.
+
+{ BrowserRouter, Routes, Route } – These are named exports from the react-router-dom package:
+
+BrowserRouter – A component that sets up client-side routing using the HTML5 History API (pushState, popState). It's the root router provider.
+
+Routes – A container that holds all your individual routes. It replaces Switch from earlier versions.
+
+Route – Defines a single route (URL path) and the component that should be rendered when that path is visited.
+
+"react-router-dom" – A third-party library that provides routing functionality for React web apps.
+import LandingPage from "./Components/LandingPage";
+import UserPage from "./Components/UserPage";
+import LoginPage from "./Pages/LoginPage";
+import RegisterPage from "./Pages/RegisterPage";
+Each import brings in a React component that you've created.
+
+The path ("./Components/LandingPage") is a relative file path, pointing to where each component is stored in your project structure.
+
+LandingPage, UserPage – Likely UI components stored in a Components folder.
+
+LoginPage, RegisterPage – Pages for login and registration, probably in a Pages folder.
+
+2. App Component Definition
+function App() {
+Defines a React functional component called App.
+
+This is typically the root component of your application.
+  return (
+The return statement returns JSX – a syntax extension that lets you write HTML-like code in React components.
+
+3. BrowserRouter and Routing Setup
+    <BrowserRouter>
+Wraps the entire routing structure.
+
+Ensures the app can listen to the browser’s URL and render the correct component when the URL changes.
+    <Routes>
+A wrapper for all your <Route> elements.
+
+Ensures that only one route is matched and rendered at a time.
+
+4. Defining Individual Routes
+      <Route path="/" element={<LandingPage />} />
+<Route /> – Represents a single route.
+
+path="/" – Matches the root URL (e.g., http://localhost:3000/).
+
+element={<LandingPage />} – When the route matches /, this component is rendered.
+      <Route path="/register" element={<RegisterPage />} />
+path="/register" – Matches URL like http://localhost:3000/register.
+
+element={<RegisterPage />} – Loads the RegisterPage component for that URL.
+      <Route path="/login" element={<LoginPage />} />
+Same pattern as above: matches the /login route and renders LoginPage.
+      <Route path="/user" element={<UserPage />} />
+Matches /user, renders the UserPage component.
+
+    </Routes>
+Ends the <Routes> block.
+    </BrowserRouter>
+Ends the <BrowserRouter> block.
+  );
+}
+Ends the JSX return and the function body.
+5. Exporting the Component
+export default App;
+export default – Makes the App component available to other parts of the application (like index.js) as the default export.
+
+This means when you import App from './App', you're importing this exact component.
+
+Summary
+This code sets up a React app with four routes:
+
+URL Path	Rendered Component
+/	LandingPage
+/register	RegisterPage
+/login	LoginPage
+/user	UserPage
+
+It uses the React Router library to handle navigation without full-page reloads, using React components instead.

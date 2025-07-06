@@ -1,0 +1,246 @@
+import {FaChartLine, FaFileAlt } from 'react-icons/fa';
+import { FaClockRotateLeft } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+import './LandingPage.css';
+import HeadingImg from './Images/HeadingImg.png';
+import works1 from './Images/works1.png';
+import works2 from './Images/works2.png';
+
+const LandingPage: React.FC = () => {
+  const navigate = useNavigate();
+  return (
+    <div className="mainContainer">
+      {/* Heading Section */}
+      <div className="headingContainer">
+        <div className="headingText">
+          <h1>Smart Feedback Portal</h1>
+          <button className="btn primary" onClick={() => navigate("/register")}>Get Started</button>
+        </div>
+        <div className="headingImg">
+          <img src={HeadingImg} alt="Smart Feedback Portal" />
+        </div>
+      </div>
+
+      {/* How It Works Section */}
+      <div className="worksSection">
+        <h2>How It Works</h2>
+        <div className="worksContent">
+          <div className="worksText">
+            <p>Your streamlined feedback collection and analysis, automated by smart tools.</p>
+          </div>
+          <div className="worksIconGroup">
+            <div className="iconBlock">
+              <img src={works1} alt="024 Works" />
+              <p>024 Works</p>
+            </div>
+            <div className="iconBlock">
+              <img src={works2} alt="Live Feedback" />
+              <p>Live Feedback</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Key Features Section */}
+      <div className="keyFeatures">
+        <h2>Key Features</h2>
+        <div className="featuresGrid">
+          <div className="featureBox">
+            <FaClockRotateLeft size={32} />
+            <h4>Feedback History</h4>
+          </div>
+          <div className="featureBox">
+            <FaChartLine size={32} />
+            <h4>Real-time Analytics</h4>
+          </div>
+          <div className="featureBox">
+            <FaFileAlt size={32} />
+            <h4>Automated Report</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LandingPage;
+
+🔹 Imports
+
+import { FaChartLine, FaFileAlt } from 'react-icons/fa';
+import – Brings external code into this file.
+
+{ FaChartLine, FaFileAlt } – These are icon components from the react-icons/fa package (Font Awesome icon pack).
+
+'react-icons/fa' – Path to the Font Awesome icon set inside the react-icons library.
+
+import { FaClockRotateLeft } from "react-icons/fa6";
+FaClockRotateLeft – Another icon component, but from the Font Awesome 6 pack (fa6).
+
+Used for visual elements in the UI.
+
+import { useNavigate } from "react-router-dom";
+useNavigate – A React Router hook that lets you programmatically change routes (navigate to another page in the app).
+
+import './LandingPage.css';
+Imports a CSS file to style the landing page.
+
+The file should be in the same folder and define classes like .mainContainer, .btn, etc.
+
+import HeadingImg from './Images/HeadingImg.png';
+import works1 from './Images/works1.png';
+import works2 from './Images/works2.png';
+These lines import image files so they can be used in JSX (<img src={...} />).
+
+HeadingImg, works1, and works2 become variables containing the URL to the image so React can load them correctly.
+
+🔹 LandingPage Component
+const LandingPage: React.FC = () => {
+const – Declares a constant variable.
+
+LandingPage – The name of the component.
+
+: React.FC – Type annotation saying this is a React Functional Component (from TypeScript).
+
+= () => { – The component is defined as an arrow function.
+
+useNavigate Hook
+
+const navigate = useNavigate();
+Calls the useNavigate hook to get a navigate function.
+
+This allows us to change the URL programmatically (like when a button is clicked).
+
+🔹 JSX Return Block
+
+return (
+  <div className="mainContainer">
+Returns JSX, which describes the structure of the UI.
+
+<div className="mainContainer"> – A div with a CSS class for layout/styling.
+
+🔸 Heading Section
+
+{/* Heading Section */}
+<div className="headingContainer">
+JSX comments use {/* */}.
+
+This section likely includes a title and an image.
+
+  <div className="headingText">
+    <h1>Smart Feedback Portal</h1>
+A text block with a heading.
+
+    <button className="btn primary" onClick={() => navigate("/register")}>
+      Get Started
+    </button>
+A button styled with classes btn primary.
+
+onClick={() => navigate("/register")} – When clicked, uses the navigate function to go to the /register route.
+
+  </div>
+  <div className="headingImg">
+    <img src={HeadingImg} alt="Smart Feedback Portal" />
+  </div>
+</div>
+Shows the imported image HeadingImg.
+
+alt="..." – Text to show if the image doesn’t load (important for accessibility).
+
+🔸 "How It Works" Section
+
+<div className="worksSection">
+  <h2>How It Works</h2>
+Section heading.
+
+
+  <div className="worksContent">
+    <div className="worksText">
+      <p>Your streamlined feedback collection and analysis, automated by smart tools.</p>
+    </div>
+Descriptive paragraph about how the system works.
+
+
+    <div className="worksIconGroup">
+      <div className="iconBlock">
+        <img src={works1} alt="024 Works" />
+        <p>024 Works</p>
+      </div>
+      <div className="iconBlock">
+        <img src={works2} alt="Live Feedback" />
+        <p>Live Feedback</p>
+      </div>
+    </div>
+  </div>
+</div>
+A group of two blocks, each with:
+
+An image (works1, works2),
+
+A caption ("024 Works" and "Live Feedback").
+
+🔸 Key Features Section
+
+<div className="keyFeatures">
+  <h2>Key Features</h2>
+Another section with a heading.
+
+  <div className="featuresGrid">
+    <div className="featureBox">
+      <FaClockRotateLeft size={32} />
+      <h4>Feedback History</h4>
+    </div>
+One feature block with:
+
+A rotating clock icon.
+
+A heading for the feature.
+
+
+    <div className="featureBox">
+      <FaChartLine size={32} />
+      <h4>Real-time Analytics</h4>
+    </div>
+    <div className="featureBox">
+      <FaFileAlt size={32} />
+      <h4>Automated Report</h4>
+    </div>
+  </div>
+</div>
+Other blocks show icons for chart line and file, each with its own feature title.
+
+🔚 End of Component
+</div>
+);
+};
+Closes all the JSX tags.
+
+Ends the component function.
+
+🔚 Export the Component
+
+export default LandingPage;
+export default – Allows this component to be used in other files.
+
+You can import it like: import LandingPage from './LandingPage';
+
+✅ Summary (What this code does):
+Creates a visually styled landing page for a "Smart Feedback Portal".
+
+Includes:
+
+A headline and CTA button.
+
+A "How It Works" section with visuals.
+
+A "Key Features" section using icons.
+
+Uses:
+
+React Router (useNavigate) to change pages.
+
+React Icons for vector icons.
+
+Local images and CSS for layout and design.
+
+Written using TypeScript and React Functional Component style.

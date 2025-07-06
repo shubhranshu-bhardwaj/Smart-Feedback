@@ -1,0 +1,211 @@
+using SmartFeedbackAPI.Data;
+using SmartFeedbackAPI.Models;
+using SmartFeedbackAPI.Services;
+using SmartFeedbackAPI.DTOs;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace SmartFeedbackAPI.Controllers;
+
+[ApiController]
+[Route("api/auth")]
+public class AuthController : ControllerBase
+{
+    private readonly DataContext _context;
+    private readonly TokenService _tokenService;
+
+    public AuthController(DataContext context, TokenService tokenService)
+    {
+        _context = context;
+        _tokenService = tokenService;
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(User user)
+    {
+        if (await _context.Users.AnyAsync(u => u.Email == user.Email))
+            return BadRequest("Email already exists");
+
+        user.PasswordHash = HashPassword(user.PasswordHash);
+        await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
+
+        return Ok("User registered");
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginDto dto)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+        if (user == null || !VerifyPassword(dto.Password, user.PasswordHash))
+            return Unauthorized("Invalid credentials");
+
+        var token = _tokenService.CreateToken(user);
+        return Ok(new
+        {
+            token,
+            isAdmin = user.IsAdmin,
+            fullName = user.FullName
+        });
+    }
+
+    private string HashPassword(string password) =>
+        Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(password)));
+
+    private bool VerifyPassword(string password, string storedHash) =>
+        HashPassword(password) == storedHash;
+}
+
+📦 Namespaces (Imports)
+
+using SmartFeedbackAPI.Data;
+Imports your data access layer, likely contains the DataContext class (Entity Framework DB context).
+
+using SmartFeedbackAPI.Models;
+Brings in your entity models — like the User class that maps to your database.
+
+using SmartFeedbackAPI.Services;
+Imports custom services — like TokenService, used to generate JWTs.
+
+using SmartFeedbackAPI.DTOs;
+Imports DTOs (Data Transfer Objects) — e.g., LoginDto, used for accepting login form data without exposing full User models.
+
+using Microsoft.AspNetCore.Mvc;
+Brings in controller-related attributes and base classes like ControllerBase, HttpPost, Route, IActionResult, etc.
+
+using Microsoft.EntityFrameworkCore;
+Enables Entity Framework Core functionality like AnyAsync(), FirstOrDefaultAsync(), and querying the DB.
+
+using System.Security.Cryptography;
+using System.Text;
+Used for password hashing:
+
+SHA256 from System.Security.Cryptography hashes strings securely.
+
+Encoding.UTF8 encodes strings into byte arrays.
+
+🔧 Controller Declaration
+
+namespace SmartFeedbackAPI.Controllers;
+Declares the namespace this controller belongs to — helps organize your app.
+
+[ApiController]
+Tells ASP.NET Core that this is a Web API controller.
+
+Enables features like automatic model validation and error responses.
+
+[Route("api/auth")]
+All routes inside this controller will start with /api/auth.
+
+For example, /api/auth/register, /api/auth/login.
+
+public class AuthController : ControllerBase
+Defines the controller class.
+
+ControllerBase: base class for API-only controllers (no views).
+
+🔐 Constructor Injection
+
+private readonly DataContext _context;
+private readonly TokenService _tokenService;
+Declares two private fields:
+
+_context: for database access.
+
+_tokenService: for generating JWT tokens.
+
+public AuthController(DataContext context, TokenService tokenService)
+{
+    _context = context;
+    _tokenService = tokenService;
+}
+Constructor uses dependency injection to populate those fields.
+
+📝 Register() Method
+
+[HttpPost("register")]
+Defines an HTTP POST route at /api/auth/register.
+
+public async Task<IActionResult> Register(User user)
+Receives a User object in the request body.
+
+Returns IActionResult (flexible HTTP responses like 200, 400, 401, etc).
+
+if (await _context.Users.AnyAsync(u => u.Email == user.Email))
+    return BadRequest("Email already exists");
+Checks if an account already exists with the same email.
+
+If yes, returns a 400 Bad Request.
+
+user.PasswordHash = HashPassword(user.PasswordHash);
+Replaces the raw password with its SHA-256 hashed version.
+
+await _context.Users.AddAsync(user);
+await _context.SaveChangesAsync();
+Adds the new user to the database and commits the transaction.
+
+return Ok("User registered");
+Returns HTTP 200 OK with a simple success message.
+
+🔑 Login() Method
+
+[HttpPost("login")]
+Handles POST /api/auth/login requests.
+
+public async Task<IActionResult> Login([FromBody] LoginDto dto)
+Accepts login data via a DTO (LoginDto) containing Email and Password.
+
+[FromBody]: tells ASP.NET to bind the JSON request body to the dto.
+
+var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+Tries to find a user in the DB matching the submitted email.
+
+if (user == null || !VerifyPassword(dto.Password, user.PasswordHash))
+    return Unauthorized("Invalid credentials");
+If user doesn't exist or password doesn’t match, return 401 Unauthorized.
+
+var token = _tokenService.CreateToken(user);
+Calls a method to generate a JWT token for the authenticated user.
+
+return Ok(new
+{
+    token,
+    isAdmin = user.IsAdmin,
+    fullName = user.FullName
+});
+Returns HTTP 200 OK with a JSON object:
+
+token: for client-side authentication.
+
+isAdmin: for role-based routing.
+
+fullName: for display purposes on the UI.
+
+🔒 Password Utilities
+
+private string HashPassword(string password) =>
+    Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(password)));
+Converts the plain-text password into:
+
+UTF-8 bytes → hashed via SHA256 → Base64-encoded string.
+
+Base64 makes it easier to store or send the hash as a string.
+
+private bool VerifyPassword(string password, string storedHash) =>
+    HashPassword(password) == storedHash;
+Compares a plain-text password (from user input) with the stored hashed password.
+
+Returns true if they match.
+
+✅ Summary
+Part	Role
+AuthController	Handles auth logic: register and login
+Register()	Validates and registers new users securely
+Login()	Authenticates users and returns JWT tokens
+HashPassword()	Uses SHA-256 to hash passwords
+VerifyPassword()	Compares password input with stored hash
+TokenService	(Not shown) Likely creates JWTs for user identity
+LoginDto	DTO to safely receive login form data
+DataContext	Manages DB access using EF Core

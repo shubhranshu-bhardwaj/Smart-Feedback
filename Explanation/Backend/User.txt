@@ -1,0 +1,155 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace SmartFeedbackAPI.Models;
+
+public class User
+{
+     public int Id { get; set; }
+
+    [Required]
+    public string FullName { get; set; } = "";
+
+    [Required]
+    public string Email { get; set; } = "";
+
+    [Required]
+    public string PasswordHash { get; set; } = "";
+
+    public string Gender { get; set; } = "";
+
+    public bool IsAdmin { get; set; } = false;
+}
+
+🔷 Line 1: using System.ComponentModel.DataAnnotations;
+using
+
+Brings in a namespace so you can use its classes without writing the full path.
+
+System.ComponentModel.DataAnnotations
+
+A .NET namespace that provides attributes for validating data.
+
+You get attributes like [Required], [StringLength], [EmailAddress], etc.
+
+🧠 Used for model validation, especially useful in DTOs and Entity Framework models.
+
+🔷 Line 3: namespace SmartFeedbackAPI.Models;
+namespace
+
+A logical grouping of classes. Similar to folders or modules.
+
+SmartFeedbackAPI.Models
+
+This class belongs to the Models part of the app.
+
+The User model is part of the business/domain layer.
+
+🔷 Line 5: public class User
+public
+
+This class can be accessed from anywhere — including controllers, services, and data context.
+
+class
+
+Declares a custom data type with properties and behaviors.
+
+User
+
+Name of the class.
+
+Represents a user entity, most likely mapped to a database table by Entity Framework Core.
+
+🔷 Line 6: public int Id { get; set; }
+public: This property is accessible from other classes.
+
+int: Integer type. Used for unique identification.
+
+Id: Primary key of the user.
+
+{ get; set; }: Auto-implemented property — compiler creates a private field behind the scenes.
+
+🧠 In Entity Framework, the property Id or UserId is automatically considered a primary key.
+
+🔷 Line 8–9: [Required]
+Used before properties to indicate they are mandatory.
+
+➕ On FullName:
+
+[Required]
+public string FullName { get; set; } = "";
+[Required]: Data annotations attribute. Means:
+
+Validation will fail if FullName is empty or null.
+
+Can be validated server-side or automatically by ASP.NET model binding.
+
+string: Data type — stores text.
+
+= "": Initializes the property to an empty string by default.
+
+🧠 Prevents null reference issues and enforces validation on POST requests.
+
+🔷 Similar structure for:
+
+[Required]
+public string Email { get; set; } = "";
+
+[Required]
+public string PasswordHash { get; set; } = "";
+Email: Stores the user's email.
+
+PasswordHash: Stores the hashed version of their password.
+
+Both are marked as [Required].
+
+🛡️ The use of PasswordHash instead of Password shows a security best practice: never store plaintext passwords.
+
+🔷 Line 15: public string Gender { get; set; } = "";
+Not marked as [Required] — so it’s optional.
+
+Stores the user’s gender (e.g., "Male", "Female", "Other").
+
+Initialized to an empty string by default.
+
+🔷 Line 17: public bool IsAdmin { get; set; } = false;
+bool: A boolean value (true or false).
+
+IsAdmin: Indicates if the user has admin privileges.
+
+Defaults to false, meaning regular user unless explicitly set.
+
+👮‍♂️ Can be used to authorize certain actions (e.g., only admins can manage users or settings).
+
+✅ Summary of All Properties
+Property	Type	Purpose	Required
+Id	int	Unique identifier (Primary Key)	Yes
+FullName	string	User’s full name	✅
+Email	string	Email for login/contact	✅
+PasswordHash	string	Secure hash of password	✅
+Gender	string	Optional gender info	❌
+IsAdmin	bool	Whether user is admin	❌ (default = false)
+
+🔐 Real-world Usage
+This User class is used by:
+
+Entity Framework Core to map to a Users table.
+
+Controllers like AuthController for:
+
+Registering a new user
+
+Logging in and checking IsAdmin
+
+Validation logic to ensure required fields are filled.
+
+🚀 Example JSON Representation
+When saving or returning this model, it could look like:
+
+{
+  "id": 1,
+  "fullName": "John Doe",
+  "email": "john@example.com",
+  "passwordHash": "3aX4b...",
+  "gender": "Male",
+  "isAdmin": false
+}

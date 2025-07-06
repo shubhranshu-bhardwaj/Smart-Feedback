@@ -1,0 +1,113 @@
+namespace SmartFeedbackAPI.DTOs;
+
+public class LoginDto
+{
+    public string Email { get; set; } = "";
+    public string Password { get; set; } = "";
+}
+
+🔷 Line 1: namespace SmartFeedbackAPI.DTOs;
+namespace:
+
+This is how C# organizes code into logical containers.
+
+A namespace acts like a folder or package.
+
+You can reference types within this namespace in other files using using SmartFeedbackAPI.DTOs.
+
+SmartFeedbackAPI.DTOs:
+
+Custom namespace defined by the developer.
+
+"DTOs" stands for Data Transfer Objects — lightweight classes used to carry data between client and server, or between layers in an app (e.g., controller → service).
+
+This file’s class, LoginDto, is part of this namespace.
+
+🔷 Line 3: public class LoginDto
+public:
+
+This class is accessible from anywhere in the project.
+
+Without public, it would be internal by default (only accessible within the same assembly).
+
+class:
+
+A user-defined type that groups data and behavior (fields + methods).
+
+Here it just holds data — no behavior.
+
+LoginDto:
+
+The name of the class.
+
+By convention, Dto suffix = Data Transfer Object.
+
+This particular DTO is used to accept or send login information (typically in a POST body).
+
+🔷 Line 4: public string Email { get; set; } = "";
+Let’s break it apart fully:
+
+public:
+
+This property (think: field with built-in getters and setters) is accessible outside this class.
+
+string:
+
+The data type — holds a text value.
+
+This will store the email address of the user trying to log in.
+
+Email:
+
+The name of the property.
+
+C# naming convention is PascalCase for public members.
+
+{ get; set; }:
+
+This is an auto-implemented property.
+
+get retrieves the value; set assigns a new value.
+
+No need to manually write backing fields.
+
+= "":
+
+Initializes the Email property to an empty string.
+
+This avoids null values unless explicitly set to null.
+
+🔷 Line 5: public string Password { get; set; } = "";
+Same structure as Email.
+
+Holds the plaintext password entered by the user in a login form.
+
+🛡️ Note: It’s common (and recommended) not to expose passwords in DTOs when responding to the client — this DTO is only used for receiving login requests.
+
+🔐 Summary: What does this class do?
+It's a simple container for login request data: email and password.
+
+The client (frontend app) sends this data in a POST request body, and the server binds it to this DTO object.
+
+👇 Example usage:
+When a client sends a request like:
+
+{
+  "email": "user@example.com",
+  "password": "mySecret123"
+}
+ASP.NET Core will automatically bind that request body to a LoginDto object like:
+
+[HttpPost("login")]
+public async Task<IActionResult> Login([FromBody] LoginDto dto)
+{
+    // dto.Email => "user@example.com"
+    // dto.Password => "mySecret123"
+}
+🧠 Key Concepts Introduced
+Concept	Explanation
+namespace	Organizes code logically.
+DTO	Simplified class to transfer data across system boundaries.
+public class	Class that can be used anywhere.
+Auto-properties	Short-hand for properties with get/set.
+Initialization (= "")	Avoids null reference exceptions.

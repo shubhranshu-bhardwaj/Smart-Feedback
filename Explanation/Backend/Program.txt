@@ -1,0 +1,265 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using SmartFeedbackAPI.Data;          
+using SmartFeedbackAPI.Services;     
+var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddControllers();
+
+
+builder.Services.AddOpenApi();
+
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseSqlite("Data Source=smartfeedback.db"));
+
+
+builder.Services.AddScoped<TokenService>();
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+            )
+        };
+    });
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireRole("Admin"));
+});
+
+var app = builder.Build();
+
+
+app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
+
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
+
+app.UseHttpsRedirection();
+app.MapControllers();
+app.Run();
+
+
+🔹 Top-level Usings
+
+using Microsoft.EntityFrameworkCore;
+Imports Entity Framework Core (EF Core), used for database access (ORM).
+
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+Brings in support for JWT Bearer authentication (token-based auth).
+
+using Microsoft.IdentityModel.Tokens;
+Includes cryptographic tools to validate JWT tokens.
+
+using System.Text;
+Provides Encoding.UTF8.GetBytes(...) to convert your secret string key into byte arrays for security keys.
+
+using SmartFeedbackAPI.Data;
+Imports the DataContext class, which manages the database.
+
+using SmartFeedbackAPI.Services;
+Imports the TokenService (used to generate JWT tokens).
+
+🔹 Application Builder
+
+var builder = WebApplication.CreateBuilder(args);
+This initializes the web app.
+
+args are CLI args (e.g., dotnet run --port 5001).
+
+builder will help configure services and middleware.
+
+🔹 Register MVC Controllers
+
+builder.Services.AddControllers();
+Registers controller support for Web API endpoints ([ApiController] annotated classes).
+
+🔹 Swagger/OpenAPI (Assumed Extension Method)
+
+builder.Services.AddOpenApi();
+Presumably a custom extension method that registers Swagger/OpenAPI.
+
+Allows you to auto-generate API documentation and test endpoints.
+
+📝 You likely have a helper method like:
+
+public static class SwaggerExtensions
+{
+    public static IServiceCollection AddOpenApi(this IServiceCollection services)
+    {
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+        return services;
+    }
+}
+🔹 Database Context Configuration
+
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseSqlite("Data Source=smartfeedback.db"));
+Registers the DataContext (your EF Core DB context) with SQLite as the DB engine.
+
+smartfeedback.db is the local database file.
+
+🔹 Token Service Registration
+
+builder.Services.AddScoped<TokenService>();
+Registers TokenService with Scoped lifetime:
+
+New instance per HTTP request.
+
+Used to generate JWT tokens in the login flow.
+
+🔹 JWT Authentication Configuration
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+Enables JWT Bearer token authentication.
+
+All API calls must include a token in the Authorization: Bearer <token> header.
+
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+        )
+    };
+});
+🔑 TokenValidationParameters
+Controls how incoming tokens are verified:
+
+ValidateIssuer = false: You don’t check the token's "issuer" claim.
+
+ValidateAudience = false: You don’t check the token's "audience" claim.
+
+ValidateLifetime = true: Reject expired tokens.
+
+ValidateIssuerSigningKey = true: Enforce signature validation using your key.
+
+IssuerSigningKey: Uses your secret string (Jwt:Key) as the signing key for HMAC-SHA256.
+
+🔹 Enable CORS
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+CORS = Cross-Origin Resource Sharing.
+
+Allows a frontend (e.g. React/Vite running at localhost:5173) to make API calls.
+
+Allows:
+
+Any headers (e.g. Authorization)
+
+Any methods (GET, POST, PUT, etc.)
+
+🔹 Add Authorization with Custom Policy
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireRole("Admin"));
+});
+Defines a custom policy "AdminOnly":
+
+Only accessible to users with a role claim of "Admin" in their JWT.
+
+🔹 Build the App
+
+var app = builder.Build();
+Compiles the configuration and prepares the middleware pipeline.
+
+🔹 Apply Middleware
+1. Enable CORS
+
+app.UseCors();
+Applies the CORS policy defined earlier.
+
+2. Enable Authentication
+
+app.UseAuthentication();
+Enables JWT authentication.
+
+Looks for Bearer tokens in incoming requests.
+
+3. Enable Authorization
+
+app.UseAuthorization();
+Enforces access control (e.g., role policies like AdminOnly).
+
+🔹 Swagger UI in Development Only
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
+If running in Development mode:
+
+Enables Swagger UI and OpenAPI endpoints.
+
+MapOpenApi() is likely another custom extension for app.UseSwagger() and app.UseSwaggerUI().
+
+🔹 HTTPS Redirection
+
+app.UseHttpsRedirection();
+Redirects HTTP requests to HTTPS.
+
+🔹 Map Controllers
+
+app.MapControllers();
+Maps [ApiController]-annotated classes to routes like /api/auth.
+
+🔹 Start the App
+
+app.Run();
+Launches the web server and starts listening for HTTP requests.
+
+✅ Summary Table
+Section	Purpose
+AddControllers()	Enables MVC-style controller routing
+AddDbContext()	Registers SQLite DB with EF Core
+AddScoped<TokenService>()	Enables JWT token generation
+AddAuthentication().AddJwtBearer()	Enables token validation
+AddCors()	Allows frontend requests from another origin
+AddAuthorization()	Defines role-based access control
+MapControllers()	Maps API routes
+Run()	Starts the application

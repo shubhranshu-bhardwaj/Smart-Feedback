@@ -1,0 +1,127 @@
+using SmartFeedbackAPI.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace SmartFeedbackAPI.Data;
+
+public class DataContext : DbContext
+{
+    public DataContext(DbContextOptions<DataContext> options) : base(options)
+    {
+
+    }
+    
+     public DbSet<User> Users { get; set; }
+}
+
+1. using SmartFeedbackAPI.Models;
+using: A directive that imports a namespace, so you can use its types without fully qualifying them.
+
+SmartFeedbackAPI.Models: This is the namespace where your entity classes live, like User.
+
+✅ This allows you to use the User class directly in this file.
+
+2. using Microsoft.EntityFrameworkCore;
+Imports Entity Framework Core, Microsoft's object-relational mapper (ORM).
+
+Required for using DbContext, DbSet<T>, and other EF Core features.
+
+3. namespace SmartFeedbackAPI.Data;
+Defines the namespace that this class belongs to.
+
+This is a way to organize code into logical groups (like folders in a project).
+
+Here, Data likely contains database-related classes like DataContext.
+
+4. public class DataContext : DbContext
+public: This class is accessible from other files/modules.
+
+class: Declares a new class named DataContext.
+
+DataContext: The name of this custom class. It's your app's database context.
+
+:: Inheritance operator — means this class inherits from another.
+
+DbContext: Base class provided by EF Core to interact with the database.
+
+🧠 What is DbContext?
+
+It represents a session with the database.
+
+Lets you query and save data.
+
+Maps your C# classes to database tables.
+
+5. public DataContext(DbContextOptions<DataContext> options) : base(options)
+This is the constructor of the DataContext class.
+
+Let’s break it down:
+
+public: Accessible outside this class.
+
+DataContext(...): The constructor method for creating instances of DataContext.
+
+DbContextOptions<DataContext> options:
+
+A generic object holding settings like connection strings, DB provider (e.g., SQL Server), etc.
+
+Provided by the dependency injection container in ASP.NET Core.
+
+: base(options):
+
+Passes options to the base class (DbContext) constructor.
+
+This is how EF Core gets configured.
+
+🧠 This setup lets you configure your DB connection externally (e.g., in Startup.cs or Program.cs) and plug it in via DI.
+
+6. public DbSet<User> Users { get; set; }
+This line is extremely important — it exposes a table in your database via a C# class.
+
+Let’s break it down word-by-word:
+
+public: Accessible from other parts of the application.
+
+DbSet<User>:
+
+A collection of User entities that EF Core tracks.
+
+It represents a table in the database called Users (by default pluralized).
+
+User is your model class, and its properties become the columns in that table.
+
+Users:
+
+The property name that your code will use to query/update this table.
+
+Conventionally plural (e.g., Users, Products, etc.).
+
+{ get; set; }:
+
+Auto-implemented property.
+
+EF Core needs both get and set to track this collection.
+
+🧠 EF will generate a Users table, and every row will be a User object.
+
+🏁 In Summary
+Part	Purpose
+DataContext	Main bridge between your C# code and the database
+DbContext	EF Core base class that provides database functionality
+DbSet<User>	Represents a table of User records
+Constructor	Configures the context using dependency injection
+
+🔧 Real-world use:
+You'd typically register this in your app like:
+
+services.AddDbContext<DataContext>(options =>
+    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+Then, you can inject it into services or controllers:
+
+public class AuthController : ControllerBase
+{
+    private readonly DataContext _context;
+    public AuthController(DataContext context) => _context = context;
+}
+And use it like:
+
+var users = await _context.Users.ToListAsync();

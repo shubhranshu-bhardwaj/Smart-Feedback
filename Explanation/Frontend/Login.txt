@@ -1,0 +1,296 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import API from '../api/api';
+import './Auth.css';
+
+interface LoginData {
+  email: string;
+  password: string;
+};
+
+const LoginPage: React.FC = () => {
+
+  const [formVal, setFormVal] = useState<LoginData>({
+    email: "",
+    password: ""
+  });
+
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormVal((prev) => ({ ...prev, [name]: value }));
+    setError(null);
+    setSuccess(false);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { email, password } = formVal;
+
+    try {
+      const res = await API.post('/auth/login', {
+        email,
+        password,
+      });
+
+      if (res.status === 200) {
+        const { token, isAdmin, fullName } = res.data;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("isAdmin", isAdmin);
+        localStorage.setItem("userName", fullName);
+
+        setSuccess(true);
+
+        setTimeout(() => {
+          if (isAdmin === true || isAdmin === "true") {
+            navigate("/");
+          } else {
+            navigate("/user");
+          }
+        }, 1000);
+      }
+    } catch (err: any) {
+      console.error("Login error:", err);
+      setError(err?.response?.data || "Invalid credentials.");
+      setSuccess(false);
+    }
+  };
+
+  return (
+    <>
+      <div className="parentContainer">
+
+        <form onSubmit={handleSubmit}>
+          <h3>Login</h3>
+          <label htmlFor="">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={formVal.email}
+            onChange={handleChange}
+            placeholder="Enter email" />
+
+          <br />
+
+          <label htmlFor="">Password</label>
+          <input
+            type="password"
+            name="password"
+            value={formVal.password}
+            onChange={handleChange}
+            placeholder="Enter password" />
+
+          <br />
+          <button type="submit">Login</button>
+          {error && <p className="error">{error}</p>}
+          {success && <p className="success">Login successful!</p>}
+          <p className="redirect-text">
+            Don't have an account? <Link to="/register">Register here</Link>
+          </p>
+        </form>
+
+      </div>
+    </>
+  )
+}
+
+export default LoginPage
+
+📦 1. Imports
+
+import { useState } from "react";
+useState is a React Hook to create and manage component state.
+
+import { Link, useNavigate } from "react-router-dom";
+Link: React Router component to navigate between routes without reloading.
+
+useNavigate: React Router hook to programmatically redirect users.
+
+import API from '../api/api';
+Imports a configured Axios instance (API) for making HTTP requests to your backend.
+
+import './Auth.css';
+Imports styles from a CSS file specific to authentication (likely for layout and styling the login form).
+
+📐 2. Type Definition
+
+interface LoginData {
+  email: string;
+  password: string;
+};
+LoginData defines the structure of the login form data.
+
+Used for TypeScript safety to ensure correct form state shape.
+
+🧠 3. Component Definition
+
+const LoginPage: React.FC = () => {
+Declares a functional React component named LoginPage.
+
+🔧 4. State Hooks
+
+const [formVal, setFormVal] = useState<LoginData>({
+  email: "",
+  password: ""
+});
+formVal: current form input values (email, password).
+
+setFormVal: function to update form values.
+
+const [error, setError] = useState<string | null>(null);
+error: holds error messages to display if login fails.
+
+const [success, setSuccess] = useState<boolean>(false);
+success: boolean to show a success message on login.
+
+const navigate = useNavigate();
+Hook to navigate to other pages after login (e.g. redirect to dashboard).
+
+🖊️ 5. Input Change Handler
+
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+Called whenever the user types in an input field.
+
+  const { name, value } = e.target;
+Extracts name (either "email" or "password") and value from the input field.
+
+  setFormVal((prev) => ({ ...prev, [name]: value }));
+Updates only the changed field in formVal while preserving the others (using spread operator).
+
+  setError(null);
+  setSuccess(false);
+Clears previous error and success states on new input.
+
+📤 6. Form Submit Handler
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+Prevents the default form submit (which reloads the page).
+
+  const { email, password } = formVal;
+Extracts the current values from state.
+
+📡 Send login request:
+
+  const res = await API.post('/auth/login', {
+    email,
+    password,
+  });
+Sends a POST request to /auth/login with the login credentials.
+
+✅ On successful response:
+
+  if (res.status === 200) {
+    const { token, isAdmin, fullName } = res.data;
+If login is successful, extract token, isAdmin, and fullName from the response.
+
+    localStorage.setItem("token", token);
+    localStorage.setItem("isAdmin", isAdmin);
+    localStorage.setItem("userName", fullName);
+Save login details in localStorage for session persistence.
+
+    setSuccess(true);
+Show success message.
+
+    setTimeout(() => {
+      if (isAdmin === true || isAdmin === "true") {
+        navigate("/");
+      } else {
+        navigate("/user");
+      }
+    }, 1000);
+After 1 second, redirect:
+
+/ for admins
+
+/user for regular users
+
+❌ On login failure:
+
+} catch (err: any) {
+  console.error("Login error:", err);
+  setError(err?.response?.data || "Invalid credentials.");
+  setSuccess(false);
+}
+If the login fails:
+
+Show error message (from server or default).
+
+Log error to the console.
+
+Ensure success message is not shown.
+
+🎨 7. Render UI
+
+return (
+  <>
+    <div className="parentContainer">
+Wrapper div styled by Auth.css.
+
+      <form onSubmit={handleSubmit}>
+        <h3>Login</h3>
+Form element that calls handleSubmit when submitted.
+
+📥 Email Input
+
+        <label htmlFor="">Email</label>
+        <input
+          type="email"
+          name="email"
+          value={formVal.email}
+          onChange={handleChange}
+          placeholder="Enter email" />
+Email input field linked to formVal.email.
+
+onChange updates state on typing.
+
+🔐 Password Input
+
+        <label htmlFor="">Password</label>
+        <input
+          type="password"
+          name="password"
+          value={formVal.password}
+          onChange={handleChange}
+          placeholder="Enter password" />
+Password input field linked to formVal.password.
+
+🔘 Submit Button
+
+        <button type="submit">Login</button>
+Triggers form submission.
+
+⚠️ Feedback Messages
+
+        {error && <p className="error">{error}</p>}
+        {success && <p className="success">Login successful!</p>}
+Conditionally show error or success messages.
+
+🔗 Registration Link
+
+        <p className="redirect-text">
+          Don't have an account? <Link to="/register">Register here</Link>
+        </p>
+Prompts user to register if they don’t have an account.
+
+<Link> navigates to /register.
+
+📤 8. Export Component
+
+export default LoginPage;
+Makes this component available for use in other parts of the app.
+
+✅ Summary
+This LoginPage component:
+
+Feature	Explanation
+Form Handling	Uses controlled inputs (formVal) to manage form state.
+API Integration	Sends login request via Axios (API.post).
+Navigation	Redirects using useNavigate() based on user role.
+Storage	Saves token and user info in localStorage.
+Feedback	Shows error/success messages dynamically.
+UI	Clean form with CSS styling and routing support.

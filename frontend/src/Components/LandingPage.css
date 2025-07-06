@@ -1,0 +1,152 @@
+body {
+  box-sizing: border-box;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  width: 100vw;
+  overflow-x: hidden;
+  background-color: #fff;
+  overflow-y: auto;
+}
+
+.mainContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  background-color: white;
+}
+
+.headingContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.headingText{
+    width: 45%;
+}
+
+.headingText h1 {
+  font-size: 36px;
+  margin-bottom: 16px;
+}
+
+.btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+}
+
+.primary {
+  background-color: #5c60f5;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.primary:hover {
+  background-color: #4347dd;
+}
+
+.headingImg{
+    width: 50%;
+    height: 250px;
+}
+
+.headingImg img {
+  width: 100%;
+  height: 100%;
+  border-radius: 55px;
+}
+
+.worksSection {
+  margin-top: 20px;
+}
+
+.worksSection h2 {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.worksContent {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.worksText {
+  flex: 1 1 280px;
+}
+
+.worksText p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.worksIconGroup {
+  flex: 2 1 400px;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.iconBlock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  flex: 1 1 100px;
+}
+
+.iconBlock img {
+  width: 88px;
+  height: 88px;
+}
+
+.keyFeatures {
+  margin-top: 20px;
+}
+
+.keyFeatures h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.featureBox {
+  background-color: #f1f3f5;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.featureBox:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.featureBox h4 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.featureBox p {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+}

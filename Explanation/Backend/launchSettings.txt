@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:5200",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "https": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "https://localhost:7082;http://localhost:5200",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
+
+✅ File Type
+
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+"$schema": Informs tools (like VS Code) which JSON schema to use for validation and IntelliSense.
+
+"https://json.schemastore.org/launchsettings.json": A publicly hosted JSON Schema that defines what properties are allowed and their types for launchSettings.json.
+
+✅ profiles Section
+
+  "profiles": {
+"profiles": A section defining different launch configurations (environments) for your app.
+
+Each profile describes:
+
+How the app runs (command, ports, environment).
+
+Whether the browser opens.
+
+What environment variables are set.
+
+🔹 Profile: "http"
+
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:5200",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+Explanation
+"http": The name of this launch profile. Used by tools like dotnet run --launch-profile http.
+
+Inside "http":
+Key	Meaning
+"commandName": "Project"	Tells dotnet run to use the project file (e.g. .csproj) as the entry point.
+"dotnetRunMessages": true	Enables helpful console messages during dotnet run (like which URL the server is listening on).
+"launchBrowser": false	Prevents automatically launching a browser window when the app starts.
+"applicationUrl": "http://localhost:5200"	Specifies the URL the app listens on. Port 5200 in this case.
+"environmentVariables"	Allows you to define environment variables at runtime.
+
+"ASPNETCORE_ENVIRONMENT": "Development"
+Sets the app’s environment to "Development", which:
+
+Enables Developer Exception Page.
+
+Enables Swagger UI if coded that way.
+
+Enables hot-reloading and more logging.
+
+🔹 Profile: "https"
+json
+Copy
+Edit
+    "https": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "https://localhost:7082;http://localhost:5200",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
+Explanation
+"https": A second profile that enables both HTTPS and HTTP endpoints.
+
+Inside "https":
+"applicationUrl": "https://localhost:7082;http://localhost:5200":
+
+Starts the server on two ports:
+
+https://localhost:7082 (secure)
+
+http://localhost:5200 (insecure fallback)
+
+ASP.NET Core can listen on multiple endpoints simultaneously.
+
+Other properties (commandName, dotnetRunMessages, launchBrowser, and ASPNETCORE_ENVIRONMENT) are the same as in the "http" profile.
+
+🔚 Summary
+Property	Meaning
+$schema	Tells editors how to validate this JSON.
+profiles	A dictionary of launch environments (like http, https).
+commandName	"Project" means use dotnet run on the main project.
+applicationUrl	URLs and ports the server listens on.
+dotnetRunMessages	Extra logging when app starts.
+launchBrowser	Whether to open the browser automatically.
+environmentVariables	Set runtime variables like ASPNETCORE_ENVIRONMENT.
+
+🧪 How to Use It
+With CLI:
+
+bash
+Copy
+Edit
+dotnet run --launch-profile https
+In VS Code or Visual Studio:
+
+You can select the launch profile (http, https) from a dropdown when debugging.
+

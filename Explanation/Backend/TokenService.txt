@@ -1,0 +1,218 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using SmartFeedbackAPI.Models;
+
+namespace SmartFeedbackAPI.Services;
+
+public class TokenService
+{
+    private readonly IConfiguration _config;
+
+    public TokenService(IConfiguration config)
+    {
+        _config = config;
+    }
+
+    public string CreateToken(User user)
+    {
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.Name, user.Email),
+            new Claim("UserId", user.Id.ToString()),
+            new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            claims: claims,
+            expires: DateTime.Now.AddDays(1),
+            signingCredentials: creds
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+}
+
+✅ Full Code Location
+This class is in the namespace:
+
+namespace SmartFeedbackAPI.Services;
+So it's likely used by controllers like AuthController to generate secure login tokens.
+
+🧱 File Overview
+This class:
+
+Uses JWT libraries.
+
+Loads a secret key from config.
+
+Creates a signed JWT token with claims (user info).
+
+Returns it as a string.
+
+🔍 LINE-BY-LINE EXPLANATION
+🔹 using Directives
+
+using System.IdentityModel.Tokens.Jwt;
+Imports classes to create and handle JWTs like JwtSecurityTokenHandler.
+
+using System.Security.Claims;
+Provides the Claim class to include user data in the token.
+
+using System.Text;
+Needed for string encoding (e.g., converting a secret key to bytes).
+
+using Microsoft.IdentityModel.Tokens;
+Gives access to token signing logic like SigningCredentials, SecurityAlgorithms, etc.
+
+using SmartFeedbackAPI.Models;
+Lets us use the User model, which holds info like Email, Id, and IsAdmin.
+
+🔹 Namespace
+
+namespace SmartFeedbackAPI.Services;
+Logical grouping of services in the API.
+
+TokenService is placed under this namespace.
+
+🔹 Class Definition
+
+public class TokenService
+A public service class.
+
+The goal: create JWTs for users.
+
+🔹 Field
+
+private readonly IConfiguration _config;
+IConfiguration is built into ASP.NET Core.
+
+It lets you read values from appsettings.json, like secrets and keys.
+
+_config stores the injected configuration for internal use.
+
+🔹 Constructor
+
+public TokenService(IConfiguration config)
+{
+    _config = config;
+}
+ASP.NET Core uses Dependency Injection (DI).
+
+When creating TokenService, it automatically passes IConfiguration.
+
+This lets the service read configuration values like Jwt:Key.
+
+🔹 Method: CreateToken
+
+public string CreateToken(User user)
+Returns a JWT token as a string.
+
+Takes in a User object with data like Email, Id, IsAdmin.
+
+🔹 Creating Claims
+
+var claims = new[]
+{
+    new Claim(ClaimTypes.Name, user.Email),
+    new Claim("UserId", user.Id.ToString()),
+    new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
+};
+What are claims?
+
+They’re bits of info embedded in the token.
+
+Used to identify the user and their role/permissions.
+
+Explanation:
+
+ClaimTypes.Name: A standard claim type. Sets the user's email as name.
+
+"UserId": A custom claim with the user's ID.
+
+ClaimTypes.Role: Sets "Admin" or "User" depending on user.IsAdmin.
+
+🔹 Creating Signing Key
+
+var key = new SymmetricSecurityKey(
+    Encoding.UTF8.GetBytes(_config["Jwt:Key"]!)
+);
+Reads the secret key string from appsettings.json:
+
+"Jwt": {
+  "Key": "verysecretkey12345"
+}
+Encoding.UTF8.GetBytes(...): Converts string to bytes.
+
+SymmetricSecurityKey: Uses this byte array as the cryptographic key.
+
+🧠 ! is the null-forgiving operator. It tells the compiler: “I know this isn't null.”
+
+🔹 Signing Credentials
+
+var creds = new SigningCredentials(
+    key, SecurityAlgorithms.HmacSha256
+);
+SigningCredentials: Defines how the token is signed.
+
+Uses:
+
+Your key (key)
+
+HmacSha256: A secure hash algorithm for signing
+
+🔐 This ensures the token can't be modified without knowing the secret key.
+
+🔹 Create Token Object
+
+var token = new JwtSecurityToken(
+    claims: claims,
+    expires: DateTime.Now.AddDays(1),
+    signingCredentials: creds
+);
+Creates a JWT that:
+
+Includes the user's claims
+
+Expires in 1 day
+
+Is signed with the provided credentials
+
+🔹 Convert Token to String
+
+return new JwtSecurityTokenHandler().WriteToken(token);
+JwtSecurityTokenHandler is used to convert the JwtSecurityToken into a compact JWT string, like:
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+This token is returned to the client (frontend).
+
+✅ Final Output
+The CreateToken method returns a signed JWT string like this:
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "isAdmin": true,
+  "fullName": "Jane Smith"
+}
+🔐 Why JWT?
+JWT allows stateless authentication. Instead of saving user sessions in memory:
+
+You give the client a signed token
+
+Every time the client makes a request, it includes the token in the Authorization header
+
+The server can verify the token and know who the user is, without needing to store session info
+
+💡 Summary
+Component	Purpose
+TokenService	Creates signed JWTs for login
+IConfiguration	Injected to access secrets from config
+Claims	Embed user identity and role inside token
+SymmetricSecurityKey	Secret key to sign tokens
+SigningCredentials	Defines signing algorithm and key
+JwtSecurityToken	Represents the full token
+WriteToken()	Converts token object to string
