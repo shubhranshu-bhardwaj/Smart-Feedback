@@ -1,38 +1,78 @@
+// using System.IdentityModel.Tokens.Jwt;
+// using System.Security.Claims;
+// using System.Text;
+// using Microsoft.IdentityModel.Tokens;
+// using SmartFeedbackAPI.Models;
+
+// namespace SmartFeedbackAPI.Services;
+
+// public class TokenService
+// {
+//     private readonly IConfiguration _config;
+
+//     public TokenService(IConfiguration config)
+//     {
+//         _config = config;
+//     }
+
+//     public string CreateToken(User user)
+//     {
+//         var claims = new[]
+//         {
+//             new Claim(ClaimTypes.Name, user.Email),
+//             new Claim("UserId", user.Id.ToString()),
+//             new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
+//         };
+
+//         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
+//         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+//         var token = new JwtSecurityToken(
+//             claims: claims,
+//             expires: DateTime.Now.AddDays(1),
+//             signingCredentials: creds
+//         );
+
+//         return new JwtSecurityTokenHandler().WriteToken(token);
+//     }
+// }
+
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using SmartFeedbackAPI.Models;
 
-namespace SmartFeedbackAPI.Services;
-
-public class TokenService
+namespace SmartFeedbackAPI.Services
 {
-    private readonly IConfiguration _config;
-
-    public TokenService(IConfiguration config)
+    public class TokenService
     {
-        _config = config;
-    }
+        private readonly IConfiguration _config;
 
-    public string CreateToken(User user)
-    {
-        var claims = new[]
+        public TokenService(IConfiguration config)
         {
-            new Claim(ClaimTypes.Name, user.Email),
-            new Claim("UserId", user.Id.ToString()),
-            new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
-        };
+            _config = config;
+        }
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        public string CreateToken(User user)
+        {
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // REQUIRED for [Authorize]
+                new Claim(ClaimTypes.Name, user.Email),
+                new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
+            };
 
-        var token = new JwtSecurityToken(
-            claims: claims,
-            expires: DateTime.Now.AddDays(1),
-            signingCredentials: creds
-        );
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.UtcNow.AddDays(1),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
     }
 }

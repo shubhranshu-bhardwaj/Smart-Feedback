@@ -67,7 +67,7 @@ const RegisterPage: React.FC = () => {
                 }, 1000);
             }
         } catch (err: any) {
-            alert(err?.response?.data || "Registration failed.");
+            
             setError("Something went wrong.");
         }
     };
@@ -104,7 +104,7 @@ const RegisterPage: React.FC = () => {
                         name="email"
                         value={formVal.email}
                         onChange={handleChange}
-                        placeholder="Eneter email" />
+                        placeholder="Enter email" />
 
 
 

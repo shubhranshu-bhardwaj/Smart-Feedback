@@ -53,7 +53,8 @@ const LoginPage: React.FC = () => {
           }
         }, 1000);
       }
-    } catch (err: any) {
+    }
+     catch (err: any) {
       console.error("Login error:", err);
       setError(err?.response?.data || "Invalid credentials.");
       setSuccess(false);
