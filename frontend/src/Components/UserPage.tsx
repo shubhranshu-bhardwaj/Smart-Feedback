@@ -16,6 +16,7 @@ interface SubmittedFeedback {
   category: string;
   subcategory: string;
   submittedAt: string;
+  message: string;
 }
 
 const categories = ['Department', 'Services', 'Events', 'Others'] as const;
@@ -42,6 +43,7 @@ const UserPage: React.FC = () => {
   const [showProfileDropdown, setShowProfileDropdown] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>('');
   const [submittedFeedbacks, setSubmittedFeedbacks] = useState<SubmittedFeedback[]>([]);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   const profileRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -84,7 +86,7 @@ const UserPage: React.FC = () => {
       }
 
       if (dropdownRef.current && !dropdownRef.current.contains(target)) {
-        setOpenCategoryDropdown(null); // ✅ Just close dropdown, don't clear selection
+        setOpenCategoryDropdown(null);
       }
     };
 
@@ -155,6 +157,10 @@ const UserPage: React.FC = () => {
               fb.subcategory === selectedSubcategory
           )
         : [];
+
+  const toggleExpand = (index: number) => {
+    setExpandedIndex(expandedIndex === index ? null : index);
+  };
 
   return (
     <div className="user-page">
@@ -240,7 +246,11 @@ const UserPage: React.FC = () => {
           <div className="feedback-list">
             {filteredFeedbacks.length > 0 ? (
               filteredFeedbacks.map((fb, index) => (
-                <div className="feedback-card" key={index}>
+                <div
+                  className={`feedback-card ${expandedIndex === index ? 'expanded' : ''}`}
+                  key={index}
+                  onClick={() => toggleExpand(index)}
+                >
                   <div className="status-dot" />
                   <div className="feedback-content">
                     <div className="feedback-title">{fb.heading}</div>
@@ -252,6 +262,11 @@ const UserPage: React.FC = () => {
                         {new Date(fb.submittedAt).toLocaleString()}
                       </span>
                     </div>
+                    {expandedIndex === index && (
+                      <div className="feedback-message">
+                        {fb.message}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))
