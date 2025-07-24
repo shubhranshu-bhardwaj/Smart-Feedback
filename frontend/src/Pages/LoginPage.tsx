@@ -47,7 +47,7 @@ const LoginPage: React.FC = () => {
 
         setTimeout(() => {
           if (isAdmin === true || isAdmin === "true") {
-            navigate("/");
+            navigate("/admin");
           } else {
             navigate("/user");
           }

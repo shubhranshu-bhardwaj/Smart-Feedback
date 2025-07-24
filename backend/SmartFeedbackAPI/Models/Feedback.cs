@@ -15,6 +15,7 @@ public class Feedback
 
     [Required]
     public string Message { get; set; } = string.Empty;
+    public string? Image { get; set; }
     public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
 
     // Foreign key

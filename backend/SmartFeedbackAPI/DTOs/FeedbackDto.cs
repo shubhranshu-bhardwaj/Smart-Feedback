@@ -15,5 +15,7 @@ namespace SmartFeedbackAPI.DTOs
 
         [Required]
         public string Message { get; set; } = string.Empty;
+
+        public string? Image { get; set; } // Optional image field
     }
 }
