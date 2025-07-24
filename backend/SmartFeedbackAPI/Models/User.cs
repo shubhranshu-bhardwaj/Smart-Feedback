@@ -16,6 +16,7 @@ public class User
     public string PasswordHash { get; set; } = "";
 
     public string Gender { get; set; } = "";
+    public string? Img { get; set; }
 
     public bool IsAdmin { get; set; } = false;
 }
