@@ -116,7 +116,7 @@ const AdminPage = () => {
       `"${fb.heading}"`,
       `"${fb.category}"`,
       `"${fb.subcategory}"`,
-      `"${fb.message.replace(/"/g, '""')}"`, // Escape quotes
+      `"${fb.message.replace(/"/g, '""')}"`,
       `"${fb.imageUrl || ""}"`,
       `"${new Date(fb.submittedAt).toLocaleString()}"`
     ]);
@@ -220,12 +220,9 @@ const AdminPage = () => {
               className="feedback-card"
               onClick={() => toggleCardExpansion(fb.id)}
             >
-              <div className={`feedback-status ${fb.status?.replace(/\s/g, "") || "Unknown"}`}>
-                {fb.status}
-              </div>
-              <h3 className="feedback-heading">{fb.heading}</h3>
+              <h2 className="feedback-heading">{fb.heading}</h2>
               <p className="feedback-category">
-                {fb.category} / {fb.subcategory}
+                <h3>{fb.category} / <span>{fb.subcategory}</span></h3>
               </p>
               <p className={`feedback-message ${expandedCards.has(fb.id) ? "expanded" : ""}`}>
                 {fb.message}

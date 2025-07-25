@@ -198,8 +198,16 @@
   margin-bottom: 6px;
 }
 
-.feedback-category {
+.feedback-category h3 {
   font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.feedback-category h3 span {
+  font-size: 14px;
+  font-weight: 500;
   color: #555;
   margin-bottom: 12px;
 }
