@@ -159,45 +159,64 @@ const AdminPage = () => {
 
       {/* Filter + Total Feedback Row */}
       <div className="filters-row">
-        {/* Existing Filters */}
-        <div className="filter-group">
-          <label>Category</label>
-          <select
-            className="filter-select"
-            value={category}
-            onChange={(e) => {
-              setCategory(e.target.value);
-              setSubcategory("");
-            }}
-          >
-            <option value="">All Categories</option>
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="filter-group">
-          <label>Subcategory</label>
-          <select
-            className="filter-select"
-            value={subcategory}
-            onChange={(e) => setSubcategory(e.target.value)}
-            disabled={!category}
-          >
-            <option value="">All Subcategories</option>
-            {category &&
-              subcategoriesMap[category]?.map((sub) => (
-                <option key={sub} value={sub}>
-                  {sub}
+        <div className="filter-container">
+          {/* Category Dropdown */}
+          <div className="filter-group">
+            <label>Category</label>
+            <select
+              className="filter-select"
+              value={category}
+              onChange={(e) => {
+                setCategory(e.target.value);
+                setSubcategory("");
+              }}
+            >
+              <option value="">All Categories</option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
                 </option>
               ))}
-          </select>
+            </select>
+          </div>
+
+          {/* Subcategory Dropdown */}
+          <div className="filter-group">
+            <label>Subcategory</label>
+            <select
+              className="filter-select"
+              value={subcategory}
+              onChange={(e) => setSubcategory(e.target.value)}
+              disabled={!category}
+            >
+              <option value="">All Subcategories</option>
+              {category &&
+                subcategoriesMap[category]?.map((sub) => (
+                  <option key={sub} value={sub}>
+                    {sub}
+                  </option>
+                ))}
+            </select>
+          </div>
+
+          {/* Clear Filter Button */}
+          {category && (
+            <div className="filter-group">
+              <label style={{ visibility: "hidden" }}>Clear</label>
+              <button
+                className="btn-clear-filter"
+                onClick={() => {
+                  setCategory("");
+                  setSubcategory("");
+                }}
+              >
+                Clear Filter
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* Feedback Count + Export Button Wrapper */}
+        {/* Feedback Count + Export */}
         <div className="feedback-export-container">
           <div className="total-feedback-box">
             <div className="feedback-label"><FaClipboardList /> Total Feedbacks</div>
@@ -209,6 +228,7 @@ const AdminPage = () => {
           </button>
         </div>
       </div>
+
 
 
       {/* Cards Section remains unchanged */}

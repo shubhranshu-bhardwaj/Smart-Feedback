@@ -92,10 +92,12 @@
 }
 
 .filter-select {
-  padding: 8px 12px;
+  height: 34px;
+  padding: 0px 12px;
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 14px;
+  margin: 0;
 }
 
 .total-feedback-box {
@@ -259,4 +261,28 @@
 .pagination-button.active {
   background-color: #2563eb;
   color: white;
+}
+
+.filter-container {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.btn-clear-filter {
+  background: linear-gradient(to right, #F97316, #DC2626);
+  color: white;
+  border: 1px solid #d1d5db;
+  padding: 0 12px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  height: 34px;
+  margin: 0;
+}
+
+.btn-clear-filter:hover {
+  background: linear-gradient(to right, #EA580C, #B91C1C);
 }
