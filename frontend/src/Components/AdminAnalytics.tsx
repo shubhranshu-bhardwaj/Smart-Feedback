@@ -202,10 +202,22 @@ const AdminAnalytics: React.FC = () => {
                 <div className="kpi-card bg-green-teal">
                     <h4> <FaUserAlt /> Most Active User</h4>
                     <p>{mostActiveUser}</p>
+                    <p className="count-text">
+                        {mostActiveUser !== 'N/A' ? `${userSubmissions[mostActiveUser]} submissions` : 'No submissions yet'}
+                    </p>
                 </div>
                 <div className="kpi-card bg-orange-red">
                     <h4> <FaLayerGroup /> Top Category</h4>
-                    <p>{Object.keys(categoryCounts)[0] || 'N/A'}</p>
+                    <p>
+                        {Object.keys(categoryCounts).length > 0
+                            ? Object.entries(categoryCounts).reduce((a, b) => (a[1] > b[1] ? a : b))[0]
+                            : 'N/A'}
+                    </p>
+                    <p className="count-text">
+                        {Object.keys(categoryCounts).length > 0
+                            ? `${Math.max(...Object.values(categoryCounts))} submissions`
+                            : 'No data'}
+                    </p>
                 </div>
             </div>
 

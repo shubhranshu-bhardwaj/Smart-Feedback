@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../api/api";
 import { useNavigate } from "react-router-dom";
-import { FaFileDownload, FaSignOutAlt, FaUserAlt, FaChartBar, FaClipboardList } from "react-icons/fa";
+import { FaFileDownload, FaSignOutAlt, FaUserAlt, FaChartBar, FaClipboardList, FaEnvelope, FaClock } from "react-icons/fa";
 import "./AdminPage.css";
 
 type Feedback = {
@@ -237,9 +237,9 @@ const AdminPage = () => {
               )}
 
               <div className="feedback-footer">
-                <p className="submitted-by">{fb.fullName}</p>
-                <p className="submitted-email">{fb.email}</p>
-                <p className="submitted-time">{new Date(fb.submittedAt).toLocaleString()}</p>
+                <p className="submitted-by"><FaUserAlt /> {fb.fullName}</p>
+                <p className="submitted-email"><FaEnvelope /> {fb.email}</p>
+                <p className="submitted-time"><FaClock /> {new Date(fb.submittedAt).toLocaleString()}</p>
               </div>
 
               {/* <div className="feedback-actions">
