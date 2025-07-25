@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../api/api";
 import { useNavigate } from "react-router-dom";
-import { FaRegTrashAlt, FaFileDownload, FaSignOutAlt, FaUserAlt, FaChartBar, FaClipboardList } from "react-icons/fa";
+import { FaFileDownload, FaSignOutAlt, FaUserAlt, FaChartBar, FaClipboardList } from "react-icons/fa";
 import "./AdminPage.css";
 
 type Feedback = {
