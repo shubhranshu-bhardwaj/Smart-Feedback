@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../api/api";
 import { useNavigate } from "react-router-dom";
-import { FaRegTrashAlt, FaFileDownload, FaSignOutAlt, FaUserAlt, FaChartBar } from "react-icons/fa";
+import { FaRegTrashAlt, FaFileDownload, FaSignOutAlt, FaUserAlt, FaChartBar, FaClipboardList } from "react-icons/fa";
 import "./AdminPage.css";
 
 type Feedback = {
@@ -73,15 +73,15 @@ const AdminPage = () => {
   };
 
 
-  const handleDelete = async (id: number) => {
-    if (!confirm("Are you sure you want to delete this feedback?")) return;
-    try {
-      await API.delete(`/admin/delete-feedback/${id}`);
-      setFeedbacks((prev) => prev.filter((f) => f.id !== id));
-    } catch (err) {
-      console.error("Failed to delete feedback", err);
-    }
-  };
+  // const handleDelete = async (id: number) => {
+  //   if (!confirm("Are you sure you want to delete this feedback?")) return;
+  //   try {
+  //     await API.delete(`/admin/delete-feedback/${id}`);
+  //     setFeedbacks((prev) => prev.filter((f) => f.id !== id));
+  //   } catch (err) {
+  //     console.error("Failed to delete feedback", err);
+  //   }
+  // };
 
   const toggleCardExpansion = (id: number) => {
     setExpandedCards((prev) => {
@@ -200,8 +200,8 @@ const AdminPage = () => {
         {/* Feedback Count + Export Button Wrapper */}
         <div className="feedback-export-container">
           <div className="total-feedback-box">
+            <div className="feedback-label"><FaClipboardList /> Total Feedbacks</div>
             <div className="feedback-count">{filteredFeedbacks.length}</div>
-            <div className="feedback-label">Total Feedbacks</div>
           </div>
 
           <button className="btn-export" onClick={handleExportCSV}>
@@ -245,7 +245,7 @@ const AdminPage = () => {
                 <p className="submitted-time">{new Date(fb.submittedAt).toLocaleString()}</p>
               </div>
 
-              <div className="feedback-actions">
+              {/* <div className="feedback-actions">
                 <button
                   className="delete-btn"
                   onClick={(e) => {
@@ -255,7 +255,7 @@ const AdminPage = () => {
                 >
                   <FaRegTrashAlt /> Delete
                 </button>
-              </div>
+              </div> */}
             </div>
           ))
         ) : (

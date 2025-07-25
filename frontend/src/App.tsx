@@ -4,6 +4,7 @@ import UserPage from "./Components/UserPage";
 import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
 import AdminPage from "./Components/AdminPage";
+import AdminAnalytics from "./Components/AdminAnalytics";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/user" element={<UserPage />} />
       <Route path="/admin" element={<AdminPage />} />
+      <Route path="/admin-analytics" element={<AdminAnalytics />} />
     </Routes>
     </BrowserRouter>
   );

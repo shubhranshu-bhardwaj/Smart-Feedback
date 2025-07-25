@@ -105,6 +105,7 @@
   padding: 12px 18px;
   border-radius: 12px;
   text-align: right;
+  height:60px;
 }
 
 .feedback-count {
@@ -129,6 +130,7 @@
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  height:60px;
 }
 
 .btn-export:hover {
@@ -137,8 +139,10 @@
 
 
 .feedback-label {
+  font-weight: bold;
   font-size: 13px;
   opacity: 0.9;
+  color:white;
 }
 
 .feedback-cards {
