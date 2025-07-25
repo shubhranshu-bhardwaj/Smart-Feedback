@@ -1,7 +1,7 @@
 .admin-dashboard {
   padding: 40px;
   font-family: sans-serif;
-  background: #f5f7fa;
+  background-image: linear-gradient(to bottom right, #f8fafc, #eff6ff, #e0e7ff);
   min-height: 100vh;
 }
 

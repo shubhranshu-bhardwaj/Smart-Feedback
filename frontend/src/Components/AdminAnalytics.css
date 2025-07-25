@@ -1,7 +1,6 @@
-/* AdminAnalytics.css */
 .admin-analytics-container {
   min-height: 100vh;
-  background: linear-gradient(to bottom right, #f8fafc, #f1f5f9);
+  background-image: linear-gradient(to bottom right, #f8fafc, #f1f5f9);
   padding: 1rem;
 }
 
