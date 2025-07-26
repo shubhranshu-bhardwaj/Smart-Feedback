@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaClipboardList, FaSignOutAlt } from "react-icons/fa";
 import "./UserPage.css";
-import Profile from "./Images/dummy.png";
 import API from "../api/api";
 
 interface FeedbackFormData {
@@ -24,11 +24,7 @@ interface SubmittedFeedback {
 const categories = ["Department", "Services", "Events", "Others"] as const;
 const subcategoriesMap: Record<string, string[]> = {
   Department: ["Development", "Administration", "HR"],
-  Services: [
-    "IT Support Services",
-    "Workplace Tools & Software",
-    "Transportation",
-  ],
+  Services: ["IT Support Services", "Workplace Tools & Software", "Transportation"],
   Events: ["Hackathons", "Tech Talks", "Employee Recognition Events"],
   Others: ["Other"],
 };
@@ -44,21 +40,13 @@ const UserPage: React.FC = () => {
 
   const [feedbackError, setFeedbackError] = useState<string | null>(null);
   const [feedbackSuccess, setFeedbackSuccess] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>("Submitted");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSubcategory, setSelectedSubcategory] = useState<string>("");
-  const [openCategoryDropdown, setOpenCategoryDropdown] = useState<
-    string | null
-  >(null);
-  const [showProfileDropdown, setShowProfileDropdown] =
-    useState<boolean>(false);
   const [userName, setUserName] = useState<string>("");
-  const [submittedFeedbacks, setSubmittedFeedbacks] = useState<
-    SubmittedFeedback[]
-  >([]);
+  const [submittedFeedbacks, setSubmittedFeedbacks] = useState<SubmittedFeedback[]>([]);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string>("");
 
-  const profileRef = useRef<HTMLDivElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -89,78 +77,20 @@ const UserPage: React.FC = () => {
     };
 
     fetchFeedbacks();
-
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-
-      if (profileRef.current && !profileRef.current.contains(target)) {
-        setShowProfileDropdown(false);
-      }
-
-      if (dropdownRef.current && !dropdownRef.current.contains(target)) {
-        setOpenCategoryDropdown(null);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [navigate]);
 
   const handleFeedbackChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFeedbackForm((prev) => ({ ...prev, [name]: value }));
-
-    if (name === "category") {
-      setFeedbackForm((prev) => ({ ...prev, subcategory: "" }));
-    }
-
+    setFeedbackForm((prev) => ({
+      ...prev,
+      [name]: value,
+      ...(name === "category" ? { subcategory: "" } : {}),
+    }));
     setFeedbackError(null);
     setFeedbackSuccess(false);
   };
-
-  // const handleFeedbackSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   const { heading, category, subcategory, feedback } = feedbackForm;
-
-  //   if (!heading || !category || !subcategory || !feedback) {
-  //     setFeedbackError('Please fill in all fields.');
-  //     return;
-  //   }
-
-  //   try {
-  //     const token = localStorage.getItem('token');
-  //     const res = await API.post(
-  //       '/feedback/submit',
-  //       { heading, category, subcategory, message: feedback },
-  //       { headers: { Authorization: `Bearer ${token}` } }
-  //     );
-
-  //     if (res.status === 200 || res.status === 201) {
-  //       setFeedbackSuccess(true);
-  //       setFeedbackForm({
-  //         heading: '',
-  //         category: '',
-  //         subcategory: '',
-  //         feedback: '',
-  //         imageUrl,
-  //       });
-
-  //       setTimeout(() => setFeedbackSuccess(false), 5000);
-
-  //       const updated = await API.get('/feedback/my-feedbacks', {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //       });
-  //       setSubmittedFeedbacks(updated.data || []);
-  //     }
-  //   } catch (err: any) {
-  //     setFeedbackSuccess(false);
-  //     setFeedbackError(err?.response?.data?.message || 'Submission failed.');
-  //   }
-  // };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -182,22 +112,18 @@ const UserPage: React.FC = () => {
       const token = localStorage.getItem("token");
       let imageUrl = "";
 
-      // Upload image separately if it exists
       if (image) {
         const formData = new FormData();
         formData.append("image", image);
-
         const uploadRes = await API.post("/feedback/upload-image", formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         });
-
         imageUrl = uploadRes.data.imageUrl;
       }
 
-      // Submit feedback with optional imageUrl
       const res = await API.post(
         "/feedback/submit",
         {
@@ -205,11 +131,9 @@ const UserPage: React.FC = () => {
           category,
           subcategory,
           message: feedback,
-          imageUrl, // optional
+          imageUrl,
         },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (res.status === 200 || res.status === 201) {
@@ -235,116 +159,131 @@ const UserPage: React.FC = () => {
     }
   };
 
-  const filteredFeedbacks =
-    selectedCategory === "Submitted"
-      ? submittedFeedbacks
-      : selectedSubcategory !== ""
-      ? submittedFeedbacks.filter(
-          (fb) =>
-            fb.category === selectedCategory &&
-            fb.subcategory === selectedSubcategory
-        )
-      : [];
+  const filteredFeedbacks = submittedFeedbacks.filter((fb) => {
+  const fbCategory = (fb.category || "").toLowerCase().trim();
+  const fbSubcategory = (fb.subcategory || "").toLowerCase().trim();
+  const selectedCat = selectedCategory.toLowerCase().trim();
+  const selectedSub = selectedSubcategory.toLowerCase().trim();
+
+  const matchesCategory = !selectedCategory || fbCategory === selectedCat;
+  const matchesSubcategory = !selectedSubcategory || fbSubcategory === selectedSub;
+
+  const matchesDate =
+    !selectedDate ||
+    new Date(fb.submittedAt).toISOString().slice(0, 10) === selectedDate;
+
+  return matchesCategory && matchesSubcategory && matchesDate;
+});
+
+
+
 
   const toggleExpand = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
   };
 
+
+
   return (
     <div className="user-page">
       {/* Navbar */}
       <nav className="navbar">
-        <div></div>
-        <div className="profile-dropdown" ref={profileRef}>
-          <img
-            src={Profile}
-            alt="User"
-            className="user-img"
-            onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-          />
-          {showProfileDropdown && (
-            <div className="dropdown-options profile-options">
-              <div className="logout-option" onClick={handleLogout}>
-                Logout
-              </div>
-            </div>
-          )}
-        </div>
+        {/* Welcome */}
+        <div className="welcome-text"> <h2>Welcome, <span>{userName}</span></h2></div>
+
+        <button className="logout-option" onClick={handleLogout}><FaSignOutAlt /> Logout</button>
+
       </nav>
 
-      {/* Welcome */}
-      <div className="welcome-text">Welcome {userName}</div>
-
-      {/* Tabs */}
-      <div className="tab-row" ref={dropdownRef}>
-        <div
-          className={`tab ${selectedCategory === "Submitted" ? "active" : ""}`}
-          onClick={() => {
-            setSelectedCategory("Submitted");
-            setSelectedSubcategory("");
-            setOpenCategoryDropdown(null);
-          }}
-        >
-          Submitted Feedback
+      {/* Filters */}
+      <div className="filters-row">
+        <div className="filter-group">
+          <label>Category</label>
+          <select
+            className="filter-select"
+            value={selectedCategory}
+            onChange={(e) => {
+              setSelectedCategory(e.target.value);
+              setSelectedSubcategory("");
+            }}
+          >
+            <option value="">All Categories</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </div>
-        {categories.map((cat) => (
-          <div key={cat} className="custom-dropdown">
-            <div
-              className={`dropdown-button ${
-                selectedCategory === cat ? "active" : ""
-              }`}
+
+        <div className="filter-group">
+          <label>Subcategory</label>
+          <select
+            className="filter-select"
+            value={selectedSubcategory}
+            onChange={(e) => setSelectedSubcategory(e.target.value)}
+            disabled={!selectedCategory}
+          >
+            <option value="">All Subcategories</option>
+            {selectedCategory &&
+              subcategoriesMap[selectedCategory]?.map((sub) => (
+                <option key={sub} value={sub}>
+                  {sub}
+                </option>
+              ))}
+          </select>
+        </div>
+        <div className="filter-group">
+          <label>Date</label>
+          <input
+            type="date"
+            className="filter-select"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+          />
+        </div>
+
+
+        {(selectedCategory || selectedDate) && (
+          <div className="filter-group">
+            <label style={{ visibility: "hidden" }}>Clear</label>
+            <button
+              className="btn-clear-filter"
               onClick={() => {
-                setSelectedCategory(cat);
+                setSelectedCategory("");
                 setSelectedSubcategory("");
-                setOpenCategoryDropdown(
-                  openCategoryDropdown === cat ? null : cat
-                );
+                setSelectedDate("");
               }}
             >
-              {cat}
-            </div>
-            {openCategoryDropdown === cat && (
-              <div className="dropdown-options">
-                {subcategoriesMap[cat].map((sub) => (
-                  <div
-                    key={sub}
-                    className={`dropdown-option ${
-                      selectedSubcategory === sub ? "selected" : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedSubcategory(sub);
-                      setOpenCategoryDropdown(null);
-                    }}
-                  >
-                    {sub}
-                  </div>
-                ))}
-              </div>
-            )}
+              Clear Filter
+            </button>
           </div>
-        ))}
+        )}
+        <div className="filter-group">
+          <div className="total-feedback-display">
+            <FaClipboardList /> Total Feedbacks:
+            <span>{filteredFeedbacks.length}</span>
+          </div>
+        </div>
+
       </div>
 
       {/* Content */}
       <div className="content">
-        {/* Feedback Section */}
+        {/* Feedback List */}
         <div className="feedback-section scrollable-column">
           <h3 className="sticky-heading">
-            {selectedCategory === "Submitted"
-              ? "Submitted Feedback"
-              : selectedSubcategory
-              ? `${selectedCategory}: ${selectedSubcategory}`
-              : `Select a subcategory`}
+            {selectedCategory
+              ? `${selectedCategory}${selectedSubcategory ? ` / ${selectedSubcategory}` : ""} Feedback`
+              : "All Feedback"}
           </h3>
 
           <div className="feedback-list">
             {filteredFeedbacks.length > 0 ? (
               filteredFeedbacks.map((fb, index) => (
                 <div
-                  className={`feedback-card ${
-                    expandedIndex === index ? "expanded" : ""
-                  }`}
                   key={index}
+                  className={`feedback-card ${expandedIndex === index ? "expanded" : ""}`}
                   onClick={() => toggleExpand(index)}
                 >
                   <div className="status-dot" />
@@ -376,13 +315,7 @@ const UserPage: React.FC = () => {
                 </div>
               ))
             ) : (
-              <div className="no-data">
-                {selectedCategory === "Submitted"
-                  ? "No feedback found..."
-                  : selectedSubcategory
-                  ? "No feedback for this category."
-                  : ""}
-              </div>
+              <div className="no-data">No feedbacks found.</div>
             )}
           </div>
         </div>
@@ -451,9 +384,7 @@ const UserPage: React.FC = () => {
             </button>
 
             {feedbackError && <p className="error">{feedbackError}</p>}
-            {feedbackSuccess && (
-              <p className="success">Feedback submitted successfully!</p>
-            )}
+            {feedbackSuccess && <p className="success">Feedback submitted successfully!</p>}
           </form>
         </div>
       </div>

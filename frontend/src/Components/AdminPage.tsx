@@ -34,6 +34,8 @@ const AdminPage = () => {
   const [subcategory, setSubcategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
+  const [selectedDate, setSelectedDate] = useState("");
+
   const itemsPerPage = 6;
 
   useEffect(() => {
@@ -60,11 +62,25 @@ const AdminPage = () => {
 
   useEffect(() => {
     let filtered = [...feedbacks];
-    if (category) filtered = filtered.filter((f) => f.category === category);
-    if (subcategory) filtered = filtered.filter((f) => f.subcategory === subcategory);
+
+    if (category) {
+      filtered = filtered.filter((f) => f.category === category);
+    }
+
+    if (subcategory) {
+      filtered = filtered.filter((f) => f.subcategory === subcategory);
+    }
+
+    if (selectedDate) {
+      filtered = filtered.filter(
+        (f) => new Date(f.submittedAt).toISOString().slice(0, 10) === selectedDate
+      );
+    }
+
     setFilteredFeedbacks(filtered);
     setCurrentPage(1);
-  }, [category, subcategory, feedbacks]);
+  }, [category, subcategory, selectedDate, feedbacks]);
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -199,8 +215,19 @@ const AdminPage = () => {
             </select>
           </div>
 
+          <div className="filter-group">
+            <label>Date</label>
+            <input
+              type="date"
+              className="filter-select"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+            />
+          </div>
+
+
           {/* Clear Filter Button */}
-          {category && (
+          {(category || selectedDate) && (
             <div className="filter-group">
               <label style={{ visibility: "hidden" }}>Clear</label>
               <button
@@ -208,6 +235,7 @@ const AdminPage = () => {
                 onClick={() => {
                   setCategory("");
                   setSubcategory("");
+                  setSelectedDate("");
                 }}
               >
                 Clear Filter
