@@ -182,13 +182,13 @@
   min-height: 0;
 }
 
-.feedback-image-container {
+.user-feedback-image-container {
   margin-top: 10px;
   text-align: center;
   margin-bottom: 5px;
 }
 
-.feedback-image {
+.user-feedback-image {
   max-width: 100%;
   max-height: 300px;
   border-radius: 10px;
@@ -205,7 +205,7 @@
   
 }
 
-.feedback-card {
+.user-feedback-card {
   background-color: white;
   margin-bottom: 10px;
   padding: 12px;
@@ -216,7 +216,7 @@
   transition: transform 0.2s;
 }
 
-.feedback-card:hover {
+.user-feedback-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
@@ -230,8 +230,9 @@
 }
 
 .feedback-title {
-  font-size: 14px;
-  color: #333;
+  font-size: 16px;
+  color: #1e3a8a;
+  font-weight: 600;
 }
 
 /* .event-section {
@@ -332,15 +333,11 @@
 }
 
 .feedback-section {
-  width: 40%;
-  min-width: 250px;
-  max-width: 40%;
-  flex-shrink: 0;
-}
-
-.event-section {
-  width: 60%;
+  width: 70%;
   min-width: 300px;
+  /* max-width: 40%; */
+  flex-shrink: 0;
+  min-width: 250px;
   flex-grow: 1;
 }
 
@@ -348,21 +345,24 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  width: 100%;
 }
 
 .feedback-meta-row {
   display: flex;
   justify-content: space-between;
   margin-top: 4px;
-  font-size: 12px;
+  font-size: 13px;
   color: #666;
+  width: 100%;
 }
 
 .feedback-meta {
-  color: #444;
+  color: #2563eb;
 }
 
 .feedback-time {
+  color: #2563eb;
   white-space: nowrap;
   margin-left: 10px;
 }
@@ -386,7 +386,7 @@
   background: #a8a8a8;
 }
 
-.feedback-card {
+.user-feedback-card {
   background-color: white;
   margin-bottom: 10px;
   padding: 12px;
@@ -399,12 +399,12 @@
   flex-direction: row;
 }
 
-.feedback-card.expanded {
+.user-feedback-card.expanded {
   flex-direction: column;
   align-items: flex-start;
 }
 
-.feedback-message {
+.user-feedback-message {
   margin-top: 10px;
   font-size: 14px;
   color: #444;

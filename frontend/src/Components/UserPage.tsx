@@ -288,7 +288,7 @@ const UserPage: React.FC = () => {
               filteredFeedbacks.map((fb, index) => (
                 <div
                   key={index}
-                  className={`feedback-card ${expandedIndex === index ? "expanded" : ""}`}
+                  className={`user-feedback-card ${expandedIndex === index ? "expanded" : ""}`}
                   onClick={() => toggleExpand(index)}
                 >
                   <div className="status-dot" />
@@ -304,13 +304,13 @@ const UserPage: React.FC = () => {
                     </div>
                     {expandedIndex === index && (
                       <>
-                        <div className="feedback-message">{fb.message}</div>
+                        <div className="user-feedback-message">{fb.message}</div>
                         {fb.imageUrl && (
-                          <div className="feedback-image-container">
+                          <div className="user-feedback-image-container">
                             <img
                               src={fb.imageUrl}
                               alt="Attached feedback"
-                              className="feedback-image"
+                              className="user-feedback-image"
                             />
                           </div>
                         )}
