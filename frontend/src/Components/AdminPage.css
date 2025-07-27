@@ -1,3 +1,8 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 .admin-dashboard {
   padding: 40px;
   font-family: sans-serif;
@@ -154,22 +159,67 @@
 }
 
 .feedback-card {
+  display: flex;
+  flex-direction: column;
   position: relative;
   background: white;
   border-radius: 16px;
-  padding: 20px;
+  padding: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
   cursor: pointer;
   transition: transform 0.2s ease;
-   padding-bottom: 30px;
+  padding-bottom: 30px;
+  height: 450px;
+  overflow: hidden;
 }
 
 .feedback-card:hover {
   transform: translateY(-4px);
 }
+
+.feedback-card-header {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+}
+
+.sentiment-badge {
+  /* position: relative; */
+  border-radius: 12px;
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.feedback-image {
+  max-height: 150px;
+  object-fit: cover;
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+
+.feedback-content-full {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+  margin-top: 10px;
+  width: 100%;
+  
+}
+
+.feedback-content-scrollable {
+  width: 100%;
+  overflow-y: auto;
+  max-height: 160px;
+  margin-top: 10px;
+  padding-right: 6px;
+  
+}
+
 
 .feedback-actions {
   position: absolute;
@@ -217,14 +267,16 @@
 .feedback-message {
   font-size: 14px;
   color: #333;
-  margin-bottom: 12px;
+  margin-top: 5px;
+  margin-bottom: 16px;
+  white-space: pre-wrap;
 }
 
 .feedback-footer {
+  margin-top: 15px;
   font-size: 12px;
   color: #666;
-  margin-top: auto;
-  margin-bottom: 8px;
+  margin-bottom: 2px;
   line-height: 1.4;
 }
 

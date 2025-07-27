@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartFeedbackAPI.Data;
+using Azure;
+using Azure.AI.TextAnalytics;
 using SmartFeedbackAPI.DTOs;
 using SmartFeedbackAPI.Models;
 using System.Security.Claims;
@@ -14,19 +16,53 @@ namespace SmartFeedbackAPI.Controllers;
 public class AdminController : ControllerBase
 {
     private readonly DataContext _context;
+    private readonly TextAnalyticsClient _textClient;
 
-    public AdminController(DataContext context)
+    public AdminController(DataContext context, IConfiguration config)
     {
         _context = context;
+        var endpoint = new Uri(config["AzureCognitiveServices:Endpoint"]);
+        var key = new AzureKeyCredential(config["AzureCognitiveServices:Key"]);
+        _textClient = new TextAnalyticsClient(endpoint, key);
     }
 
     // GET: api/admin/all-feedbacks
     [HttpGet("all-feedbacks")]
+    // public async Task<IActionResult> GetAllFeedbacks()
+    // {
+    //     var feedbacks = await _context.Feedbacks
+    //         .Include(f => f.User) // this works only if Feedback.User exists
+    //         .Select(f => new
+    //         {
+    //             f.Id,
+    //             f.Heading,
+    //             f.Category,
+    //             f.Subcategory,
+    //             f.Message,
+    //             f.SubmittedAt,
+    //             ImageUrl = f.Image,
+    //             FullName = f.User.FullName,
+    //             Email = f.User.Email
+    //         })
+    //         .OrderByDescending(f => f.SubmittedAt)
+    //         .ToListAsync();
+
+    //     return Ok(feedbacks);
+    // }
     public async Task<IActionResult> GetAllFeedbacks()
     {
         var feedbacks = await _context.Feedbacks
-            .Include(f => f.User) // this works only if Feedback.User exists
-            .Select(f => new
+            .Include(f => f.User)
+            .OrderByDescending(f => f.SubmittedAt)
+            .ToListAsync();
+
+        var resultList = new List<object>();
+
+        foreach (var f in feedbacks)
+        {
+            var sentiment = await AnalyzeSentimentAsync(f.Message);
+
+            resultList.Add(new
             {
                 f.Id,
                 f.Heading,
@@ -36,13 +72,26 @@ public class AdminController : ControllerBase
                 f.SubmittedAt,
                 ImageUrl = f.Image,
                 FullName = f.User.FullName,
-                Email = f.User.Email
-            })
-            .OrderByDescending(f => f.SubmittedAt)
-            .ToListAsync();
+                Email = f.User.Email,
+                Sentiment = sentiment
+            });
+        }
 
-        return Ok(feedbacks);
+        return Ok(resultList);
     }
+    private async Task<string> AnalyzeSentimentAsync(string text)
+    {
+        try
+        {
+            var response = await _textClient.AnalyzeSentimentAsync(text);
+            return response.Value.Sentiment.ToString(); // "Positive", "Neutral", "Negative"
+        }
+        catch
+        {
+            return "Unknown";
+        }
+    }
+
 
 
     // DELETE: api/admin/delete-feedback/{feedbackId}

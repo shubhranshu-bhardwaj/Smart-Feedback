@@ -15,6 +15,7 @@ type Feedback = {
   fullName: string;
   email: string;
   imageUrl?: string;
+  sentiment: "Positive" | "Negative" | "Neutral" | "Mixed";
 };
 
 const categories = ["Department", "Services", "Events", "Others"] as const;
@@ -50,8 +51,14 @@ const AdminPage = () => {
     const fetchFeedbacks = async () => {
       try {
         const res = await API.get("/admin/all-feedbacks");
-        setFeedbacks(res.data);
-        setFilteredFeedbacks(res.data);
+        const cleaned = res.data.map((fb: any) => ({
+          ...fb,
+          sentiment: ["Positive", "Negative", "Neutral", "Mixed"].includes(fb.sentiment)
+            ? fb.sentiment
+            : "Mixed",
+        }));
+        setFeedbacks(cleaned);
+        setFilteredFeedbacks(cleaned);
       } catch (err) {
         console.error("Error fetching feedbacks", err);
       }
@@ -147,6 +154,37 @@ const AdminPage = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const getSentimentEmoji = (sentiment: string) => {
+    switch (sentiment) {
+      case "Positive":
+        return "😊";
+      case "Negative":
+        return "😠";
+      case "Neutral":
+        return "😐";
+      case "Mixed":
+        return "🤔";
+      default:
+        return "🤔";
+    }
+  };
+
+
+  const getSentimentColor = (sentiment: string) => {
+    switch (sentiment) {
+      case "Positive":
+        return "#d4edda";
+      case "Negative":
+        return "#f8d7da";
+      case "Neutral":
+        return "#fff3cd";
+      case "Mixed":
+        return "#d1ecf1";
+      default:
+        return "#d1ecf1";
+    }
   };
 
 
@@ -268,18 +306,33 @@ const AdminPage = () => {
               className="feedback-card"
               onClick={() => toggleCardExpansion(fb.id)}
             >
+              <div className="feedback-card-header">
+                <div className="sentiment-badge" style={{ backgroundColor: getSentimentColor(fb.sentiment) }}>
+                  {getSentimentEmoji(fb.sentiment)} {fb.sentiment}
+                </div>
+              </div>
+
               <h2 className="feedback-heading">{fb.heading}</h2>
+
               <p className="feedback-category">
                 <h3>{fb.category} / <span>{fb.subcategory}</span></h3>
               </p>
-              <p className={`feedback-message ${expandedCards.has(fb.id) ? "expanded" : ""}`}>
-                {fb.message}
-              </p>
-
-              {fb.imageUrl && (
-                <img src={fb.imageUrl} alt="Feedback attachment" className="feedback-image" />
+              {fb.imageUrl ? (
+                <>
+                  <img src={fb.imageUrl} alt="Feedback attachment" className="feedback-image" />
+                  <div className="feedback-content-scrollable">
+                    <p className={`feedback-message ${expandedCards.has(fb.id) ? "expanded" : ""}`}>
+                      {fb.message}
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <div className="feedback-content-full">
+                  <p className={`feedback-message ${expandedCards.has(fb.id) ? "expanded" : ""}`}>
+                    {fb.message}
+                  </p>
+                </div>
               )}
-
               <div className="feedback-footer">
                 <p className="submitted-by"><FaUserAlt /> {fb.fullName}</p>
                 <p className="submitted-email"><FaEnvelope /> {fb.email}</p>

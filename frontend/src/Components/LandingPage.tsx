@@ -14,7 +14,7 @@ const LandingPage: React.FC = () => {
       <div className="headingContainer">
         <div className="headingText">
           <h1>Smart Feedback Portal</h1>
-          <button className="btn primary" onClick={() => navigate("/register")}>Get Started</button>
+          <button className="btn primary" onClick={() => navigate("/login")}>Get Started</button>
         </div>
         <div className="headingImg">
           <img src={HeadingImg} alt="Smart Feedback Portal" />
