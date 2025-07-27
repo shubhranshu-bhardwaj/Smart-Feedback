@@ -34,7 +34,7 @@ public class AdminController : ControllerBase
                 f.Subcategory,
                 f.Message,
                 f.SubmittedAt,
-                f.Image,
+                ImageUrl = f.Image,
                 FullName = f.User.FullName,
                 Email = f.User.Email
             })

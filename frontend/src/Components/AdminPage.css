@@ -196,21 +196,21 @@
 .feedback-heading {
   font-size: 18px;
   font-weight: 700;
-  color: #111827;
+  color: #1e3a8a;
   margin-bottom: 6px;
 }
 
 .feedback-category h3 {
   font-size: 14px;
   font-weight: 600;
-  color: #555;
+  color: #1e3a8a;
   margin-bottom: 12px;
 }
 
 .feedback-category h3 span {
   font-size: 14px;
   font-weight: 500;
-  color: #555;
+  color: #2563eb;
   margin-bottom: 12px;
 }
 

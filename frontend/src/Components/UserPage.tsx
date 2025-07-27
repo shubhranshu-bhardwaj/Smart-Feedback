@@ -48,6 +48,8 @@ const UserPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>("");
 
   const navigate = useNavigate();
+  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
+
 
   const handleLogout = () => {
     localStorage.clear();
@@ -131,7 +133,7 @@ const UserPage: React.FC = () => {
           category,
           subcategory,
           message: feedback,
-          imageUrl,
+          image: imageUrl,
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -145,6 +147,9 @@ const UserPage: React.FC = () => {
           feedback: "",
           image: null,
         });
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
 
         setTimeout(() => setFeedbackSuccess(false), 5000);
 
@@ -160,20 +165,20 @@ const UserPage: React.FC = () => {
   };
 
   const filteredFeedbacks = submittedFeedbacks.filter((fb) => {
-  const fbCategory = (fb.category || "").toLowerCase().trim();
-  const fbSubcategory = (fb.subcategory || "").toLowerCase().trim();
-  const selectedCat = selectedCategory.toLowerCase().trim();
-  const selectedSub = selectedSubcategory.toLowerCase().trim();
+    const fbCategory = (fb.category || "").toLowerCase().trim();
+    const fbSubcategory = (fb.subcategory || "").toLowerCase().trim();
+    const selectedCat = selectedCategory.toLowerCase().trim();
+    const selectedSub = selectedSubcategory.toLowerCase().trim();
 
-  const matchesCategory = !selectedCategory || fbCategory === selectedCat;
-  const matchesSubcategory = !selectedSubcategory || fbSubcategory === selectedSub;
+    const matchesCategory = !selectedCategory || fbCategory === selectedCat;
+    const matchesSubcategory = !selectedSubcategory || fbSubcategory === selectedSub;
 
-  const matchesDate =
-    !selectedDate ||
-    new Date(fb.submittedAt).toISOString().slice(0, 10) === selectedDate;
+    const matchesDate =
+      !selectedDate ||
+      new Date(fb.submittedAt).toISOString().slice(0, 10) === selectedDate;
 
-  return matchesCategory && matchesSubcategory && matchesDate;
-});
+    return matchesCategory && matchesSubcategory && matchesDate;
+  });
 
 
 
@@ -377,6 +382,7 @@ const UserPage: React.FC = () => {
               accept="image/*"
               onChange={handleImageChange}
               className="feedback-input"
+              ref={fileInputRef}
             />
 
             <button type="submit" className="submit-feedback-btn">

@@ -177,16 +177,10 @@
   min-height: 0;
 }
 
-.feedback-image {
-  max-width: 100%;
-  max-height: 200px;
-  margin-top: 10px;
-  border-radius: 8px;
-}
-
 .feedback-image-container {
   margin-top: 10px;
   text-align: center;
+  margin-bottom: 5px;
 }
 
 .feedback-image {
@@ -194,6 +188,7 @@
   max-height: 300px;
   border-radius: 10px;
   object-fit: contain;
+  margin-bottom: 10px;
 }
 
 /* .feedback-section {

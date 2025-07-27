@@ -276,12 +276,8 @@ const AdminPage = () => {
                 {fb.message}
               </p>
 
-              {fb.imageUrl && expandedCards.has(fb.id) && (
+              {fb.imageUrl && (
                 <img src={fb.imageUrl} alt="Feedback attachment" className="feedback-image" />
-              )}
-
-              {fb.imageUrl && !expandedCards.has(fb.id) && (
-                <div className="image-placeholder">Click to view attached image</div>
               )}
 
               <div className="feedback-footer">
