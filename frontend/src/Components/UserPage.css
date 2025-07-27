@@ -1,3 +1,8 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 .user-page {
   display: flex;
   flex-direction: column;
@@ -307,6 +312,7 @@
   background-color: #007bff;
   color: white;
   font-size: 15px;
+  width: 100%;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
