@@ -36,6 +36,7 @@ const AdminPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
   const [selectedDate, setSelectedDate] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const itemsPerPage = 6;
 
@@ -49,6 +50,7 @@ const AdminPage = () => {
     }
 
     const fetchFeedbacks = async () => {
+      setIsLoading(true);
       try {
         const res = await API.get("/admin/all-feedbacks");
         const cleaned = res.data.map((fb: any) => ({
@@ -61,6 +63,9 @@ const AdminPage = () => {
         setFilteredFeedbacks(cleaned);
       } catch (err) {
         console.error("Error fetching feedbacks", err);
+      }
+      finally {
+        setIsLoading(false);
       }
     };
 
@@ -299,47 +304,53 @@ const AdminPage = () => {
 
       {/* Cards Section remains unchanged */}
       <div className="feedback-cards">
-        {paginatedFeedbacks.length > 0 ? (
-          paginatedFeedbacks.map((fb) => (
-            <div
-              key={fb.id}
-              className="feedback-card"
-              onClick={() => toggleCardExpansion(fb.id)}
-            >
-              <div className="feedback-card-header">
-                <div className="sentiment-badge" style={{ backgroundColor: getSentimentColor(fb.sentiment) }}>
-                  {getSentimentEmoji(fb.sentiment)} {fb.sentiment}
+        {isLoading ? (
+          <div className="loading-indicator">
+             <div className="spinner" />
+            <p>Loading feedbacks...</p>
+          </div>
+        ) :
+          paginatedFeedbacks.length > 0 ? (
+            paginatedFeedbacks.map((fb) => (
+              <div
+                key={fb.id}
+                className="feedback-card"
+                onClick={() => toggleCardExpansion(fb.id)}
+              >
+                <div className="feedback-card-header">
+                  <div className="sentiment-badge" style={{ backgroundColor: getSentimentColor(fb.sentiment) }}>
+                    {getSentimentEmoji(fb.sentiment)} {fb.sentiment}
+                  </div>
                 </div>
-              </div>
 
-              <h2 className="feedback-heading">{fb.heading}</h2>
+                <h2 className="feedback-heading">{fb.heading}</h2>
 
-              <p className="feedback-category">
-                <h3>{fb.category} / <span>{fb.subcategory}</span></h3>
-              </p>
-              {fb.imageUrl ? (
-                <>
-                  <img src={fb.imageUrl} alt="Feedback attachment" className="feedback-image" />
-                  <div className="feedback-content-scrollable">
+                <p className="feedback-category">
+                  <h3>{fb.category} / <span>{fb.subcategory}</span></h3>
+                </p>
+                {fb.imageUrl ? (
+                  <>
+                    <img src={fb.imageUrl} alt="Feedback attachment" className="feedback-image" />
+                    <div className="feedback-content-scrollable">
+                      <p className={`feedback-message ${expandedCards.has(fb.id) ? "expanded" : ""}`}>
+                        {fb.message}
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <div className="feedback-content-full">
                     <p className={`feedback-message ${expandedCards.has(fb.id) ? "expanded" : ""}`}>
                       {fb.message}
                     </p>
                   </div>
-                </>
-              ) : (
-                <div className="feedback-content-full">
-                  <p className={`feedback-message ${expandedCards.has(fb.id) ? "expanded" : ""}`}>
-                    {fb.message}
-                  </p>
+                )}
+                <div className="feedback-footer">
+                  <p className="submitted-by"><FaUserAlt /> {fb.fullName}</p>
+                  <p className="submitted-email"><FaEnvelope /> {fb.email}</p>
+                  <p className="submitted-time"><FaClock /> {new Date(fb.submittedAt).toLocaleString()}</p>
                 </div>
-              )}
-              <div className="feedback-footer">
-                <p className="submitted-by"><FaUserAlt /> {fb.fullName}</p>
-                <p className="submitted-email"><FaEnvelope /> {fb.email}</p>
-                <p className="submitted-time"><FaClock /> {new Date(fb.submittedAt).toLocaleString()}</p>
-              </div>
 
-              {/* <div className="feedback-actions">
+                {/* <div className="feedback-actions">
                 <button
                   className="delete-btn"
                   onClick={(e) => {
@@ -350,14 +361,14 @@ const AdminPage = () => {
                   <FaRegTrashAlt /> Delete
                 </button>
               </div> */}
+              </div>
+            ))
+          ) : (
+            <div className="no-feedbacks">
+              <p>No feedbacks found</p>
+              <span>Try adjusting your filters to see more results</span>
             </div>
-          ))
-        ) : (
-          <div className="no-feedbacks">
-            <p>No feedbacks found</p>
-            <span>Try adjusting your filters to see more results</span>
-          </div>
-        )}
+          )}
       </div>
 
       {totalPages > 1 && (
