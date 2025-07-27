@@ -30,6 +30,11 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const { email, password } = formVal;
+     if (!email || !password) {
+    setError("Please fill in all fields.");
+    setSuccess(false);
+    return;
+  }
 
     try {
       const res = await API.post('/auth/login', {
@@ -85,7 +90,7 @@ const LoginPage: React.FC = () => {
             onChange={handleChange}
             placeholder="Email"
             className="input"
-            required
+            
           />
           <input
             type="password"
@@ -95,7 +100,7 @@ const LoginPage: React.FC = () => {
             onChange={handleChange}
             placeholder="Password"
             className="input"
-            required
+            
           />
           <button className="login-btn" type="submit">
             Log In

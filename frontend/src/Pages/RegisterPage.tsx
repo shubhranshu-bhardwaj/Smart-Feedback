@@ -42,10 +42,17 @@ const RegisterPage: React.FC = () => {
 
         const { fullName, gender, email, password, confirmPassword } = formVal;
 
-        if (password !== confirmPassword) {
-            setError("Passwords do not match.");
-            return;
-        }
+         if (!fullName || !gender || !email || !password || !confirmPassword) {
+        setError("Please fill in all fields.");
+        setSuccess(false);
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        setError("Passwords do not match.");
+        setSuccess(false);
+        return;
+    }
 
         const payload = { fullName, gender, email, passwordHash: password };
 
@@ -71,6 +78,7 @@ const RegisterPage: React.FC = () => {
             setError("Something went wrong.");
         }
     };
+    
     return (
         <div className="register-wrapper">
             <div className="register-left">
@@ -94,14 +102,14 @@ const RegisterPage: React.FC = () => {
                         onChange={handleChange}
                         placeholder="Full Name"
                         className="input"
-                        required
+                        
                     />
                     <select
                         name="gender"
                         value={formVal.gender}
                         onChange={handleChange}
                         className="input"
-                        required
+                        
                     >
                         <option value="">Select Gender</option>
                         <option value="Male">Male</option>
@@ -116,7 +124,7 @@ const RegisterPage: React.FC = () => {
                         onChange={handleChange}
                         placeholder="Email"
                         className="input"
-                        required
+                        
                     />
                     <input
                         type="password"
@@ -126,7 +134,7 @@ const RegisterPage: React.FC = () => {
                         onChange={handleChange}
                         placeholder="Password"
                         className="input"
-                        required
+                       
                     />
                     <input
                         type="password"
@@ -136,7 +144,7 @@ const RegisterPage: React.FC = () => {
                         onChange={handleChange}
                         placeholder="Confirm Password"
                         className="input"
-                        required
+                        
                     />
                     <button className="register-btn" type="submit">
                         Create Account
