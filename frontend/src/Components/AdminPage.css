@@ -181,6 +181,13 @@
   gap: 24px;
 }
 
+
+@media (min-width: 1200px) {
+  .feedback-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 .feedback-card {
   display: flex;
   flex-direction: column;
