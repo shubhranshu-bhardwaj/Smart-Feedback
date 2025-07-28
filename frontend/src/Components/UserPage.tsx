@@ -201,8 +201,8 @@ const UserPage: React.FC = () => {
       </nav>
 
       {/* Filters */}
-      <div className="filters-row">
-        <div className="filter-group">
+      <div className="filters-row-user">
+        <div className="filter-user-group">
           <label>Category</label>
           <select
             className="filter-select"
@@ -221,7 +221,7 @@ const UserPage: React.FC = () => {
           </select>
         </div>
 
-        <div className="filter-group">
+        <div className="filter-user-group">
           <label>Subcategory</label>
           <select
             className="filter-select"
@@ -238,7 +238,7 @@ const UserPage: React.FC = () => {
               ))}
           </select>
         </div>
-        <div className="filter-group">
+        <div className="filter-user-group">
           <label>Date</label>
           <input
             type="date"
@@ -250,10 +250,10 @@ const UserPage: React.FC = () => {
 
 
         {(selectedCategory || selectedDate) && (
-          <div className="filter-group">
+          <div className="filter-user-group">
             <label style={{ visibility: "hidden" }}>Clear</label>
             <button
-              className="btn-clear-filter"
+              className="btn-clear-filter-user"
               onClick={() => {
                 setSelectedCategory("");
                 setSelectedSubcategory("");
@@ -264,7 +264,7 @@ const UserPage: React.FC = () => {
             </button>
           </div>
         )}
-        <div className="filter-group">
+        <div className="filter-user-group">
           <div className="total-feedback-display">
             <FaClipboardList /> Total Feedbacks:
             <span>{filteredFeedbacks.length}</span>
