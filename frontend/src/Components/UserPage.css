@@ -271,7 +271,7 @@ input[type="date"]:focus {
 .feedback-input,
 .feedback-textarea {
   width: 100%;
-  padding: 10px 12px;
+  padding: 8px 10px;
   margin-bottom: 10px;
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -370,6 +370,7 @@ input[type="date"]:focus {
 .scrollable-column form {
   width: 100%;
   box-sizing: border-box;
+  margin-top: 10px;
 }
 
 .feedback-section {
