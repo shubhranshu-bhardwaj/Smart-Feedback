@@ -127,7 +127,8 @@ public class AdminController : ControllerBase
                         f.Category,
                         f.Subcategory,
                         f.Message,
-                        f.SubmittedAt
+                        f.SubmittedAt,
+                        ImageUrl = f.Image,
                     }).ToList()
             })
             .ToListAsync();
