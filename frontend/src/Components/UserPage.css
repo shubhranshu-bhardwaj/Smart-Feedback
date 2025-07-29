@@ -15,14 +15,14 @@
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(to bottom right, #f8fafc, #edf2f7, #e2e8f0);
+  background-color: #e2e8f0;
 }
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 32px;
+  padding: 16px 32px;
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid #e2e8f0;
@@ -70,7 +70,7 @@
   flex-wrap: wrap;
   gap: 3rem;
   background-color: #fff;
-  padding: 1.5rem 2rem;
+  padding: 1.1rem 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   margin: 1rem;
@@ -97,7 +97,7 @@
   font-size: 14px;
   margin: 0;
 } */
-.filter-select,
+/* .filter-select,
 input[type="date"] {
   padding: 10px 12px;
   border: 1.5px solid #ddd;
@@ -111,14 +111,14 @@ input[type="date"] {
 input[type="date"]:focus {
   border-color: #ff6600;
   box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.2);
-}
+} */
 
 .btn-clear-filter-user {
   margin-top: 5px;
   background-color: #ff6600;
   color: #fff;
   border: none;
-  padding: 10px 16px;
+  padding: 13px 16px;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
