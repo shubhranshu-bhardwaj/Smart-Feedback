@@ -290,12 +290,14 @@ const AdminPage = () => {
         {/* Feedback Count + Export */}
         <div className="feedback-export-container">
           <div className="total-feedback-box">
-            <div className="feedback-label"><FaClipboardList /> Total Feedbacks</div>
-            <div className="feedback-count">{filteredFeedbacks.length}</div>
+            <div className="feedback-info">
+              <FaClipboardList className="feedback-icon" />
+              <span className="feedback-label">Total Feedbacks:</span>
+              <span className="feedback-count">{filteredFeedbacks.length}</span>
+            </div>
           </div>
-
           <button className="btn-export" onClick={handleExportCSV}>
-            <FaFileDownload /> Export All Feedbacks
+            <FaFileDownload className="btn-icon" /> Export All Feedbacks
           </button>
         </div>
       </div>
