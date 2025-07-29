@@ -1,3 +1,7 @@
+* {
+  font-family: "Poppins", sans-serif;
+}
+
 /* Split background layout */
 .register-wrapper {
   display: flex;

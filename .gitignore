@@ -27,3 +27,8 @@ obj/
 *.sw?
 *.dll
 *.db
+*.svg
+*.html
+*.xml
+*.htm
+*.trx
