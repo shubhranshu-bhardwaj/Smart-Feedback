@@ -1,3 +1,7 @@
+* {
+  font-family: "Poppins", sans-serif;
+}
+
 .login-wrapper {
   display: flex;
   height: 100vh;

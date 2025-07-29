@@ -10,7 +10,7 @@ const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   return (
     <div className="mainContainer">
-      {/* Heading Section */}
+
       <div className="headingContainer">
         <div className="headingText">
           <h1>Smart Feedback Portal</h1>
@@ -21,7 +21,7 @@ const LandingPage: React.FC = () => {
         </div>
       </div>
 
-      {/* How It Works Section */}
+  
       <div className="worksSection">
         <h2>How It Works</h2>
         <div className="worksContent">
@@ -41,7 +41,6 @@ const LandingPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Key Features Section */}
       <div className="keyFeatures">
         <h2>Key Features</h2>
         <div className="featuresGrid">
@@ -62,5 +61,4 @@ const LandingPage: React.FC = () => {
     </div>
   );
 };
-
 export default LandingPage;

@@ -218,7 +218,7 @@ const AdminPage = () => {
 
       {/* Filter + Total Feedback Row */}
       <div className="filters-row">
-        <div className="filter-container">
+        <div className="filter-container-admin">
           {/* Category Dropdown */}
           <div className="filter-group">
             <label>Category</label>
@@ -306,7 +306,7 @@ const AdminPage = () => {
       <div className="feedback-cards">
         {isLoading ? (
           <div className="loading-indicator">
-             <div className="spinner" />
+            <div className="spinner" />
             <p>Loading feedbacks...</p>
           </div>
         ) :

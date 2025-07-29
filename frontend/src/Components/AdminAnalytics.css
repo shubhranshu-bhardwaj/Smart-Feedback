@@ -21,10 +21,9 @@
 .header-controls {
   display: flex;
   flex-direction: row;
-  gap: 1rem; 
-  flex-wrap: wrap; 
+  gap: 1rem;
+  flex-wrap: wrap;
 }
-
 
 @media (min-width: 768px) {
   .analytics-header {
@@ -37,12 +36,11 @@
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
-  color: #1e3a8a;
+  color: #1f2937;
 }
 
-
 .analytics-title span {
-  color: #2563eb;
+  color: #f97316;
 }
 
 .analytics-subtitle {
@@ -68,39 +66,49 @@
 }
 
 .analytics-button {
-  background-color: #4f46e5;
+  /* background-color: #3a3a3a;
   color: white;
   border: none;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s; */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #3a3a3a;
+  color: #f3f4f6;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .analytics-button:hover {
-  background-color: #4338ca;
+  background-color: #4b4b4b;
 }
 
 .kpi-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
 .bg-indigo-purple {
-  background: linear-gradient(to right, #6366F1, #8B5CF6);
+  background: linear-gradient(145deg, #5b21b6, #9333ea);
   color: white;
 }
 
 .bg-green-teal {
-  background: linear-gradient(to right, #22C55E, #0D9488);
+  background: linear-gradient(145deg, #059669, #10b981);
   color: white;
 }
 
 .bg-orange-red {
-  background: linear-gradient(to right, #F97316, #DC2626);
+  background: linear-gradient(145deg, #ea580c, #dc2626);
   color: white;
 }
-
 
 @media (min-width: 768px) {
   .kpi-grid {
@@ -121,12 +129,37 @@
   padding: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   border: 1px solid #f3f4f6;
+  transition: transform 0.3s ease;
 }
 
-.kpi-value {
+.kpi-card:hover {
+  transform: translateY(-5px);
+}
+.kpi-card h4 {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.kpi-card p {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.kpi-card .count-text {
+  font-size: 0.875rem;
+  color: #d1d5db;
+  margin-top: 4px;
+}
+/* .kpi-value {
   font-size: 1.875rem;
   font-weight: bold;
-}
+} */
 
 .text-green {
   color: #16a34a;
@@ -207,7 +240,6 @@
   width: 100% !important;
   height: auto !important;
 }
-
 
 .dual-chart-row {
   display: grid;
