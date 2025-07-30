@@ -310,11 +310,18 @@
 
 
 .loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   width: 100%;
+  min-height: 300px; 
   text-align: center;
-  padding: 2rem;
-  color: #6b7280;
+  color: white;
+  grid-column: 1 / -1; 
 }
+
+
 
 .spinner {
   /* margin: 0 auto 12px;
