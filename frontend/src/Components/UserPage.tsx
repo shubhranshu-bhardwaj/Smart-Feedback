@@ -276,7 +276,7 @@ const UserPage: React.FC = () => {
       {/* Content */}
       <div className="content">
         {/* Feedback List */}
-        <div className="feedback-section scrollable-column">
+        <div className="feedback-section-user scrollable-column">
           <h3 className="sticky-heading">
             {selectedCategory
               ? `${selectedCategory}${selectedSubcategory ? ` / ${selectedSubcategory}` : ""} Feedback`
