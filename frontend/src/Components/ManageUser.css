@@ -1,0 +1,334 @@
+/* === Manage Users Page === */
+.manage-users-page {
+  padding: 2rem;
+  /* background-color: #f9fafb; */
+  background: linear-gradient(to bottom, #423f45, #69646f);
+  min-height: 100vh;
+
+}
+
+/* === Top Bar Section === */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  color: black;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.topbar h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: white;
+}
+
+.topbar .highlight {
+  color: #f97316;
+}
+
+.stats-buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.stat-card {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.orange {
+  background-color: #f97316;
+  color: white;
+}
+
+.orange-outline {
+  border: 2px solid #f97316;
+  color: #f97316;
+  background-color: white;
+}
+
+.btn-primary {
+  padding: 10px 16px;
+  background-color: #f97316;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* === Search Bar === */
+.search-bar {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  
+}
+
+.search-bar input {
+  padding: 10px;
+  width: 90%;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #fffeff;
+  
+}
+
+/* === Pagination Bar (used for both outer and inner) === */
+.pagination-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.pagination-bar button {
+  padding: 8px 14px;
+  background-color: #f97316;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pagination-bar button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* === User Container === */
+.user-container {
+  border-radius: 12px;
+  background: rgb(248, 241, 241);
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+/* === User Header === */
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+   background: rgb(248, 241, 241);
+}
+
+.user-left p,
+.user-right p {
+  margin: 0.25rem 0;
+  color: #1f2937;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.btn-export {
+  margin-top: 0.5rem;
+  padding: 8px 14px;
+  background-color: #f97316;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* === Feedback Grid === */
+.feedback-section-mg {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+@media (min-width: 1200px) {
+  .feedback-section-mg {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.feedback-card-mg {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: rgb(230, 227, 227);
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  justify-content: space-between;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  padding-bottom: 30px;
+  height: 540px !important;
+  overflow: hidden;
+}
+
+.feedback-card-mg:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.feedback-card-header {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.sentiment-badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: black;
+}
+
+.feedback-heading {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.feedback-category h3 {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4b5563;
+  margin-bottom: 12px;
+}
+
+.feedback-category h3 span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f97316;
+}
+
+.feedback-image {
+  max-height: 120px;
+  object-fit: cover;
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 2px;
+}
+
+.feedback-content-scrollable {
+  width: 100%;
+  overflow-y: auto;
+  height: 220px !important;
+  max-height: 230px;
+  margin-top: 5px;
+  padding-right: 6px;
+}
+
+.feedback-content-full {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.feedback-message {
+  font-size: 0.95rem;
+  color: #333;
+  margin-top: 5px;
+  margin-bottom: 16px;
+  white-space: pre-wrap;
+  text-overflow: ellipsis;
+}
+
+.feedback-footer {
+  margin-top: 15px;
+  font-size: 12px;
+  color: #666;
+}
+
+
+/* === Feedback Card === */
+.feedback-card-user {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.feedback-card-header-user {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sentiment-badge {
+  background-color: #f3f4f6;
+  padding: 0.4rem 0.8rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #1f2937;
+}
+
+.feedback-image {
+  height: 130px !important;
+  max-height: 140px;
+  object-fit: contain;
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 2px;
+}
+
+.feedback-message-user {
+  font-size: 0.95rem;
+  color: #333;
+  white-space: pre-wrap;
+}
+
+.feedback-date-user {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.no-feedback-text {
+  font-style: italic;
+  color: #888;
+}
+
+.loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

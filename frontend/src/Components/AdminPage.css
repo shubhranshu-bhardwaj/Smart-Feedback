@@ -310,11 +310,18 @@
 
 
 .loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   width: 100%;
+  min-height: 300px; 
   text-align: center;
-  padding: 2rem;
-  color: #6b7280;
+  color: white;
+  grid-column: 1 / -1; 
 }
+
+
 
 .spinner {
   /* margin: 0 auto 12px;
@@ -360,13 +367,13 @@
   position: relative;
   background: white;
   border-radius: 16px;
-  padding: 10px;
+  padding: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   justify-content: space-between;
   cursor: pointer;
   transition: transform 0.2s ease;
   padding-bottom: 30px;
-  height: 450px;
+  height: 540px !important;
   overflow: hidden;
 }
 
@@ -422,11 +429,12 @@
 }
 
 .feedback-image {
-  max-height: 150px;
-  object-fit: cover;
+  height: 130px !important;
+  max-height: 140px;
+  object-fit: contain;
   width: 100%;
   border-radius: 12px;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .feedback-content-full {
@@ -440,8 +448,9 @@
 .feedback-content-scrollable {
   width: 100%;
   overflow-y: auto;
-  max-height: 160px;
-  margin-top: 10px;
+  height: 220px !important;
+  max-height: 230px;
+  margin-top: 5px;
   padding-right: 6px;
 }
 

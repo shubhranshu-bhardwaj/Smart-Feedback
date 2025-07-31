@@ -371,7 +371,7 @@ input[type="date"]:focus {
   margin-top: 10px;
 }
 
-.feedback-section {
+.feedback-section-user {
   width: 70%;
   min-width: 300px;
   /* max-width: 40%; */
