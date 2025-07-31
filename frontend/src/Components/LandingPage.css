@@ -1,4 +1,4 @@
-* {
+/* * {
   font-family: 'Poppins', sans-serif;
 }
 
@@ -152,5 +152,279 @@ body {
 .featureBox p {
   font-size: 14px;
   color: #555;
+  margin: 0;
+} */
+
+ * {
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  box-sizing: border-box;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  width: 100vw;
+  overflow-x: hidden;
+  background-color: #fff;
+  overflow-y: auto;
+}
+
+.mainContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  max-width: 1100px;
+  margin: auto;
+  /* background-color: white; */
+}
+
+.headingContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.headingText{
+    width: 45%;
+}
+
+.headingText h1 {
+  font-size: 36px;
+  margin-bottom: 16px;
+}
+
+.btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+}
+
+.primary {
+  background-color: #5c60f5;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.primary:hover {
+  background-color: #4347dd;
+}
+
+.headingImg{
+    width: 50%;
+    height: 250px;
+}
+
+.headingImg img {
+  width: 100%;
+  height: 100%;
+  border-radius: 55px;
+}
+
+.worksSection {
+  margin-top: 20px;
+}
+
+.worksSection h2 {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.worksContent {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.worksText {
+  flex: 1 1 280px;
+}
+
+.worksText p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.worksIconGroup {
+  flex: 2 1 400px;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.iconBlock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  flex: 1 1 100px;
+}
+
+.iconBlock img {
+  width: 88px;
+  height: 88px;
+}
+
+.keyFeatures {
+  margin-top: 20px;
+}
+
+.keyFeatures h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.featureBox {
+  background-color: #f1f3f5;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.featureBox:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.featureBox h4 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.featureBox p {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+} */
+
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
+  color: white;
+  overflow-x: hidden;
+}
+
+
+/* Hero Section */
+.heroSection {
+  /* text-align: center;
+  margin-bottom: 60px; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  /* margin-bottom: 60px; */
+}
+
+.heroSection h1 {
+  font-size: 42px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+
+.subText {
+  font-size: 16px;
+  color: #cbd5e1;
+  margin-bottom: 24px;
+}
+.centerBtn {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.btn {
+  padding: 14px 28px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  font-weight: 500;
+}
+
+.primary {
+  background: linear-gradient(to right, #6366f1, #8b5cf6);
+  color: white;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.primary:hover {
+  background: linear-gradient(to right, #4f46e5, #7c3aed);
+  transform: translateY(-2px);
+}
+
+/* Testimonial Card */
+/* .testimonialCard {
+  background: #1f2937;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  margin-bottom: 60px;
+} */
+
+.testimonialCard {
+  background: #1f2937;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  margin: 0 auto 60px;
+  /* min-height: 180px; */
+  max-width: 700px;
+  transition: opacity 0.5s ease;
+}
+
+.testimonialText {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.authorSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.authorAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.authorName {
+  font-weight: bold;
+  font-size: 14px;
+  margin: 0;
+}
+
+.authorTitle {
+  font-size: 12px;
+  color: #9ca3af;
   margin: 0;
 }
