@@ -53,6 +53,7 @@ const AdminPage = () => {
       setIsLoading(true);
       try {
         const res = await API.get("/admin/all-feedbacks");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const cleaned = res.data.map((fb: any) => ({
           ...fb,
           sentiment: ["Positive", "Negative", "Neutral", "Mixed"].includes(fb.sentiment)

@@ -30,14 +30,19 @@ const ManageUsersPage = () => {
     const [currentUserPage, setCurrentUserPage] = useState(0);
     const [currentFeedbackPage, setCurrentFeedbackPage] = useState(0);
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchUsers = async () => {
+            setIsLoading(true);
             try {
                 const res = await API.get("/admin/users-with-feedbacks");
                 setUsers(res.data);
             } catch (err) {
                 console.error("Error fetching users", err);
+            }
+            finally {
+                setIsLoading(false);
             }
         };
         fetchUsers();
@@ -45,19 +50,27 @@ const ManageUsersPage = () => {
 
     const exportUserFeedbacks = (user: UserWithFeedbacks) => {
         const header = [
+            "Full Name",
+            "Email",
             "Heading",
             "Category",
             "Subcategory",
-            "Message",
-            "Submitted At",
+            "Feedback",
+            "Image Url",
+            "Submitted Date and Time"
         ];
+
         const rows = user.feedbacks.map((fb) => [
-            fb.heading,
-            fb.category,
-            fb.subcategory,
-            fb.message.replace(/"/g, '""'),
-            new Date(fb.submittedAt).toLocaleString(),
+            `"${user.fullName}"`,
+            `"${user.email}"`,
+            `"${fb.heading.replace(/"/g, '""')}"`,
+            `"${fb.category}"`,
+            `"${fb.subcategory}"`,
+            `"${fb.message.replace(/"/g, '""')}"`,
+            `"${fb.imageUrl || ""}"`,
+            `"${new Date(fb.submittedAt).toLocaleString()}"`
         ]);
+
         const csv = [header, ...rows].map((row) => row.join(",")).join("\n");
 
         const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -114,12 +127,21 @@ const ManageUsersPage = () => {
         setCurrentFeedbackPage(0);
     }, [currentUserPage]);
 
+    if (isLoading) {
+        return (
+            <div className="loader-container">
+                <div className="spinner" />
+                <p>Loading users...</p>
+            </div>
+        );
+    }
+
     return (
         <div className="manage-users-page">
 
             {/* HEADER SECTION */}
             <div className="topbar">
-                <h2><span className="highlight">User</span> Management</h2>
+                <h1><span className="highlight">User</span> Management</h1>
                 <div className="stats-buttons">
                     <div className="stat-card orange"> Total Users: {users.length}</div>
                     <div className="stat-card orange-outline"> <FaClipboardList /> Total Feedbacks: {users.reduce((acc, user) => acc + user.feedbacks.length, 0)}</div>
@@ -153,16 +175,17 @@ const ManageUsersPage = () => {
                             <p><strong>Total Feedbacks:</strong> {currentUser.feedbacks.length}</p>
                             {currentUser.feedbacks.length > 0 && (
                                 <button onClick={() => exportUserFeedbacks(currentUser)} className="btn-export">
-                                   <FaFileDownload /> Export Feedbacks
+                                    <FaFileDownload /> Export Feedbacks
                                 </button>
                             )}
                         </div>
                     </div>
 
-                    <div className="feedback-section">
+                    <div className="feedback-section-mg">
                         {feedbacksToShow && feedbacksToShow.length > 0 ? (
                             feedbacksToShow.map((fb) => (
-                                <div key={fb.id} className="feedback-card">
+
+                                <div key={fb.id} className="feedback-card-mg">
                                     <div className="feedback-card-header">
                                         <div
                                             className="sentiment-badge"

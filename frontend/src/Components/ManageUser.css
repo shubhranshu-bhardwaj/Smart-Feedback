@@ -1,7 +1,10 @@
 /* === Manage Users Page === */
 .manage-users-page {
   padding: 2rem;
-  background-color: #f9fafb;
+  /* background-color: #f9fafb; */
+  background: linear-gradient(to bottom, #423f45, #69646f);
+  min-height: 100vh;
+
 }
 
 /* === Top Bar Section === */
@@ -9,15 +12,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #1f1f1f;
-  color: white;
+  
+  color: black;
   padding: 1rem 2rem;
   border-radius: 12px;
   margin-bottom: 2rem;
 }
 
-.topbar h2 {
-  font-size: 1.8rem;
+.topbar h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: white;
 }
 
 .topbar .highlight {
@@ -65,14 +71,17 @@
 .search-bar {
   margin-bottom: 1.5rem;
   text-align: center;
+  
 }
 
 .search-bar input {
   padding: 10px;
-  width: 300px;
+  width: 90%;
   font-size: 1rem;
   border-radius: 8px;
   border: 1px solid #ccc;
+  background-color: #fffeff;
+  
 }
 
 /* === Pagination Bar (used for both outer and inner) === */
@@ -102,7 +111,7 @@
 /* === User Container === */
 .user-container {
   border-radius: 12px;
-  background-color: #fff;
+  background: rgb(248, 241, 241);
   padding: 1rem 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   margin-bottom: 2rem;
@@ -115,12 +124,15 @@
   border-bottom: 1px solid #ddd;
   padding-bottom: 1rem;
   margin-bottom: 1.5rem;
+   background: rgb(248, 241, 241);
 }
 
 .user-left p,
 .user-right p {
   margin: 0.25rem 0;
   color: #1f2937;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 .btn-export {
@@ -135,7 +147,7 @@
 }
 
 /* === Feedback Grid === */
-.feedback-section {
+.feedback-section-mg {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -143,16 +155,16 @@
 }
 
 @media (min-width: 1200px) {
-  .feedback-section {
+  .feedback-section-mg {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-.feedback-card {
+.feedback-card-mg {
   display: flex;
   flex-direction: column;
   position: relative;
-  background: white;
+  background: rgb(230, 227, 227);
   border-radius: 16px;
   padding: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -164,7 +176,7 @@
   overflow: hidden;
 }
 
-.feedback-card:hover {
+.feedback-card-mg:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
 }
@@ -295,4 +307,28 @@
 .no-feedback-text {
   font-style: italic;
   color: #888;
+}
+
+.loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

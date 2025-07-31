@@ -88,7 +88,7 @@ public class AdminController : ControllerBase
         }
         catch
         {
-            return "Unknown";
+            return "Mixed";
         }
     }
 
@@ -111,31 +111,47 @@ public class AdminController : ControllerBase
     [HttpGet("users-with-feedbacks")]
     public async Task<IActionResult> GetUsersWithFeedbacks()
     {
-        var usersWithFeedbacks = await _context.Users
-            .Select(u => new
-            {
-                u.Id,
-                u.FullName,
-                u.Email,
-                Feedbacks = _context.Feedbacks
-                    .Where(f => f.UserId == u.Id)
-                    .OrderByDescending(f => f.SubmittedAt)
-                    .Select(f => new
-                    {
-                        f.Id,
-                        f.Heading,
-                        f.Category,
-                        f.Subcategory,
-                        f.Message,
-                        f.SubmittedAt,
-                        ImageUrl = f.Image,
-                    }).ToList()
-            })
+        var users = await _context.Users.ToListAsync();
+        var feedbacks = await _context.Feedbacks
+            .Include(f => f.User)
+            .OrderByDescending(f => f.SubmittedAt)
             .ToListAsync();
 
-        return Ok(usersWithFeedbacks);
-    }
+        var result = new List<object>();
 
+        foreach (var user in users)
+        {
+            var userFeedbacks = feedbacks.Where(f => f.UserId == user.Id).ToList();
+            var feedbackListWithSentiment = new List<object>();
+
+            foreach (var fb in userFeedbacks)
+            {
+                var sentiment = await AnalyzeSentimentAsync(fb.Message);
+
+                feedbackListWithSentiment.Add(new
+                {
+                    fb.Id,
+                    fb.Heading,
+                    fb.Category,
+                    fb.Subcategory,
+                    fb.Message,
+                    fb.SubmittedAt,
+                    ImageUrl = fb.Image,
+                    Sentiment = sentiment
+                });
+            }
+
+            result.Add(new
+            {
+                user.Id,
+                user.FullName,
+                user.Email,
+                Feedbacks = feedbackListWithSentiment
+            });
+        }
+
+        return Ok(result);
+    }
 
     // [Authorize(Roles = "Admin")]
     // [HttpGet("audit-logs")]

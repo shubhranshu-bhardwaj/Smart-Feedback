@@ -158,6 +158,7 @@ const UserPage: React.FC = () => {
         });
         setSubmittedFeedbacks(updated.data || []);
       }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setFeedbackSuccess(false);
       setFeedbackError(err?.response?.data?.message || "Submission failed.");
